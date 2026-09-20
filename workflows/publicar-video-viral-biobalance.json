@@ -1,0 +1,266 @@
+{
+  "name": "Publicar video viral BioBalance (IG Reels + FB Reels + TikTok + YouTube Shorts)",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "trigger-manual",
+      "name": "Ejecutar manualmente",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [180, 500]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "videoUrl",
+              "name": "videoUrl",
+              "type": "string",
+              "value": "https://url-publica-del-video.mp4"
+            },
+            {
+              "id": "caption",
+              "name": "caption",
+              "type": "string",
+              "value": "Texto/caption del video para IG, FB y TikTok."
+            },
+            {
+              "id": "title",
+              "name": "title",
+              "type": "string",
+              "value": "Título corto para YouTube Shorts"
+            }
+          ]
+        }
+      },
+      "id": "set-datos-video",
+      "name": "Datos del video",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [400, 500]
+    },
+
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://graph.facebook.com/v19.0/{{$env.META_IG_BUSINESS_ACCOUNT_ID}}/media",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            { "name": "media_type", "value": "REELS" },
+            { "name": "video_url", "value": "={{$json.videoUrl}}" },
+            { "name": "caption", "value": "={{$json.caption}}" },
+            { "name": "access_token", "value": "={{$env.META_IG_ACCESS_TOKEN}}" }
+          ]
+        },
+        "options": {}
+      },
+      "id": "ig-crear-container",
+      "name": "Crear Reel IG (container)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [660, 120]
+    },
+    {
+      "parameters": { "amount": 30, "unit": "seconds" },
+      "id": "ig-wait",
+      "name": "Esperar procesamiento IG",
+      "type": "n8n-nodes-base.wait",
+      "typeVersion": 1.1,
+      "position": [900, 120]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://graph.facebook.com/v19.0/{{$env.META_IG_BUSINESS_ACCOUNT_ID}}/media_publish",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            { "name": "creation_id", "value": "={{$json.id}}" },
+            { "name": "access_token", "value": "={{$env.META_IG_ACCESS_TOKEN}}" }
+          ]
+        },
+        "options": {}
+      },
+      "id": "ig-publicar",
+      "name": "Publicar Reel IG",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1140, 120]
+    },
+
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://graph.facebook.com/v19.0/{{$env.META_PAGE_ID}}/video_reels",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            { "name": "upload_phase", "value": "start" },
+            { "name": "access_token", "value": "={{$env.META_PAGE_ACCESS_TOKEN}}" }
+          ]
+        },
+        "options": {}
+      },
+      "id": "fb-iniciar",
+      "name": "Iniciar Reel FB",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [660, 350]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{$('Datos del video').item.json.videoUrl}}",
+        "options": {
+          "response": {
+            "response": { "responseFormat": "file", "outputPropertyName": "data" }
+          }
+        }
+      },
+      "id": "fb-descargar-video",
+      "name": "Descargar video (para FB)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [900, 350]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "={{$('Iniciar Reel FB').item.json.upload_url}}",
+        "sendBody": true,
+        "contentType": "binaryData",
+        "inputDataFieldName": "data",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "Authorization", "value": "=OAuth {{$env.META_PAGE_ACCESS_TOKEN}}" }
+          ]
+        },
+        "options": {}
+      },
+      "id": "fb-subir-binario",
+      "name": "Subir video a FB",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1140, 350]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://graph.facebook.com/v19.0/{{$env.META_PAGE_ID}}/video_reels",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            { "name": "upload_phase", "value": "finish" },
+            { "name": "video_id", "value": "={{$('Iniciar Reel FB').item.json.video_id}}" },
+            { "name": "video_state", "value": "PUBLISHED" },
+            { "name": "description", "value": "={{$('Datos del video').item.json.caption}}" },
+            { "name": "access_token", "value": "={{$env.META_PAGE_ACCESS_TOKEN}}" }
+          ]
+        },
+        "options": {}
+      },
+      "id": "fb-finalizar",
+      "name": "Finalizar Reel FB",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [1380, 350]
+    },
+
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "https://open.tiktokapis.com/v2/post/publish/video/init/",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            { "name": "Authorization", "value": "=Bearer {{$env.TIKTOK_ACCESS_TOKEN}}" },
+            { "name": "Content-Type", "value": "application/json" }
+          ]
+        },
+        "sendBody": true,
+        "contentType": "raw",
+        "rawContentType": "application/json",
+        "body": "={{ JSON.stringify({ post_info: { title: $json.caption, privacy_level: \"SELF_ONLY\", disable_duet: false, disable_comment: false, disable_stitch: false, video_cover_timestamp_ms: 1000 }, source_info: { source: \"PULL_FROM_URL\", video_url: $json.videoUrl } }) }}",
+        "options": {}
+      },
+      "id": "tiktok-publicar",
+      "name": "Publicar en TikTok",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [660, 620]
+    },
+
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "={{$json.videoUrl}}",
+        "options": {
+          "response": {
+            "response": { "responseFormat": "file", "outputPropertyName": "data" }
+          }
+        }
+      },
+      "id": "yt-descargar",
+      "name": "Descargar video (para YouTube)",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [660, 850]
+    },
+    {
+      "parameters": {
+        "resource": "video",
+        "operation": "upload",
+        "title": "={{$('Datos del video').item.json.title}} #Shorts",
+        "regionCode": "AR",
+        "categoryId": "22",
+        "binaryPropertyName": "data",
+        "options": { "privacyStatus": "public" }
+      },
+      "id": "yt-publicar",
+      "name": "Publicar YouTube Short",
+      "type": "n8n-nodes-base.youTube",
+      "typeVersion": 1,
+      "position": [900, 850],
+      "credentials": { "youTubeOAuth2Api": { "name": "YouTube account" } }
+    }
+  ],
+  "connections": {
+    "Ejecutar manualmente": {
+      "main": [[{ "node": "Datos del video", "type": "main", "index": 0 }]]
+    },
+    "Datos del video": {
+      "main": [
+        [
+          { "node": "Crear Reel IG (container)", "type": "main", "index": 0 },
+          { "node": "Iniciar Reel FB", "type": "main", "index": 0 },
+          { "node": "Publicar en TikTok", "type": "main", "index": 0 },
+          { "node": "Descargar video (para YouTube)", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Crear Reel IG (container)": {
+      "main": [[{ "node": "Esperar procesamiento IG", "type": "main", "index": 0 }]]
+    },
+    "Esperar procesamiento IG": {
+      "main": [[{ "node": "Publicar Reel IG", "type": "main", "index": 0 }]]
+    },
+    "Iniciar Reel FB": {
+      "main": [[{ "node": "Descargar video (para FB)", "type": "main", "index": 0 }]]
+    },
+    "Descargar video (para FB)": {
+      "main": [[{ "node": "Subir video a FB", "type": "main", "index": 0 }]]
+    },
+    "Subir video a FB": {
+      "main": [[{ "node": "Finalizar Reel FB", "type": "main", "index": 0 }]]
+    },
+    "Descargar video (para YouTube)": {
+      "main": [[{ "node": "Publicar YouTube Short", "type": "main", "index": 0 }]]
+    }
+  },
+  "active": false,
+  "settings": {},
+  "pinData": {}
+}
