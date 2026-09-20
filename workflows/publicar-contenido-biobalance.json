@@ -1,0 +1,116 @@
+{
+  "name": "Publicar contenido BioBalance (Facebook + Instagram)",
+  "nodes": [
+    {
+      "parameters": {},
+      "id": "trigger-manual",
+      "name": "Ejecutar manualmente",
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [240, 300]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "caption",
+              "name": "caption",
+              "type": "string",
+              "value": "Escribí acá el texto/caption de la pieza a publicar."
+            },
+            {
+              "id": "imageUrl",
+              "name": "imageUrl",
+              "type": "string",
+              "value": "https://url-publica-de-la-imagen.png"
+            }
+          ]
+        }
+      },
+      "id": "set-datos-post",
+      "name": "Datos del post",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [460, 300]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://graph.facebook.com/v19.0/{{$env.META_PAGE_ID}}/photos",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            { "name": "url", "value": "={{$json.imageUrl}}" },
+            { "name": "caption", "value": "={{$json.caption}}" },
+            { "name": "access_token", "value": "={{$env.META_PAGE_ACCESS_TOKEN}}" }
+          ]
+        },
+        "options": {}
+      },
+      "id": "http-fb-post",
+      "name": "Publicar en Facebook",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [700, 200]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://graph.facebook.com/v19.0/{{$env.META_IG_BUSINESS_ACCOUNT_ID}}/media",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            { "name": "image_url", "value": "={{$json.imageUrl}}" },
+            { "name": "caption", "value": "={{$json.caption}}" },
+            { "name": "access_token", "value": "={{$env.META_IG_ACCESS_TOKEN}}" }
+          ]
+        },
+        "options": {}
+      },
+      "id": "http-ig-crear-media",
+      "name": "Crear media container IG",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [700, 400]
+    },
+    {
+      "parameters": {
+        "method": "POST",
+        "url": "=https://graph.facebook.com/v19.0/{{$env.META_IG_BUSINESS_ACCOUNT_ID}}/media_publish",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            { "name": "creation_id", "value": "={{$json.id}}" },
+            { "name": "access_token", "value": "={{$env.META_IG_ACCESS_TOKEN}}" }
+          ]
+        },
+        "options": {}
+      },
+      "id": "http-ig-publicar",
+      "name": "Publicar en Instagram",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [940, 400]
+    }
+  ],
+  "connections": {
+    "Ejecutar manualmente": {
+      "main": [[{ "node": "Datos del post", "type": "main", "index": 0 }]]
+    },
+    "Datos del post": {
+      "main": [
+        [
+          { "node": "Publicar en Facebook", "type": "main", "index": 0 },
+          { "node": "Crear media container IG", "type": "main", "index": 0 }
+        ]
+      ]
+    },
+    "Crear media container IG": {
+      "main": [[{ "node": "Publicar en Instagram", "type": "main", "index": 0 }]]
+    }
+  },
+  "active": false,
+  "settings": {},
+  "pinData": {}
+}
