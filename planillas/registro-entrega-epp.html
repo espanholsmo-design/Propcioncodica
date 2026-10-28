@@ -1,0 +1,176 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>Registro de Entrega de EPP</title>
+<style>
+  @page { size: A4; margin: 11mm 11mm 11mm 11mm; }
+  * { box-sizing: border-box; }
+  body { font-family: Arial, Helvetica, sans-serif; color: #000; margin: 0; font-size: 10pt; }
+  .page { page-break-after: always; }
+  .page:last-child { page-break-after: auto; }
+  .head { border: 2px solid #000; display: flex; align-items: stretch; }
+  .head .title { flex: 1; text-align: center; padding: 6px; border-right: 2px solid #000; }
+  .head .title h1 { font-size: 14pt; margin: 2px 0; letter-spacing: .5px; }
+  .head .title p { margin: 0; font-size: 9.5pt; }
+  .head .meta { width: 50mm; font-size: 9.5pt; }
+  .head .meta div { border-bottom: 1px solid #000; padding: 5px 6px; height: 8.5mm; }
+  .head .meta div:last-child { border-bottom: none; }
+  table.info { width: 100%; border-collapse: collapse; }
+  table.info td { border: 1px solid #000; padding: 4px 6px; height: 8.5mm; vertical-align: top; font-size: 9pt; }
+  h2 { background: #d9d9d9; border: 1.5px solid #000; font-size: 10.5pt; margin: 6px 0 0; padding: 3px 6px; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .checks { border: 1px solid #000; border-top: none; padding: 5px 6px; display: grid; grid-template-columns: repeat(5, 1fr); gap: 5px 4px; font-size: 8.8pt; }
+  table.grid { width: 100%; border-collapse: collapse; }
+  table.grid th { border: 1px solid #000; background: #f0f0f0; font-size: 8pt; padding: 2px; -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  table.grid td { border: 1px solid #000; height: 8.3mm; padding: 1px 3px; font-size: 8.5pt; }
+  td.c { text-align: center; white-space: nowrap; }
+  .legend { font-size: 8pt; margin-top: 3px; }
+  .lines { border: 1px solid #000; border-top: none; padding: 0 6px; }
+  .lines div { border-bottom: 1px solid #888; height: 7.5mm; }
+  .lines div:last-child { border-bottom: none; }
+  .decl { font-size: 8.5pt; border: 1px solid #000; border-top: none; padding: 5px 6px; text-align: justify; }
+  .sign { display: flex; gap: 8mm; margin-top: 6px; }
+  .sign .box { flex: 1; border: 1.5px solid #000; padding: 6px 8px; }
+  .sign .box .space { height: 16mm; border-bottom: 1px solid #000; }
+  .sign .box p { margin: 3px 0 0; font-size: 9pt; }
+  .sign .box h3 { margin: 0 0 4px; font-size: 9.5pt; text-align: center; }
+</style>
+</head>
+<body>
+
+<!-- ===================== HOJA 1 ===================== -->
+<section class="page">
+  <div class="head">
+    <div class="title">
+      <h1>REGISTRO DE ENTREGA DE ROPA DE TRABAJO<br>Y ELEMENTOS DE PROTECCIÓN PERSONAL (EPP)</h1>
+      <p><b>SEGURIDAD E HIGIENE LABORAL</b></p>
+      <p style="margin-top:5px;">Responsable: Osmar ______________________________</p>
+    </div>
+    <div class="meta">
+      <div><b>N° de registro:</b></div>
+      <div><b>Año:</b></div>
+      <div><b>Hoja:</b> 1 de 2</div>
+    </div>
+  </div>
+
+  <h2>DATOS DE LA EMPRESA</h2>
+  <table class="info">
+    <tr><td style="width:60%"><b>Razón social:</b></td><td><b>CUIT:</b></td></tr>
+    <tr><td><b>Dirección:</b></td><td><b>Localidad / Provincia:</b></td></tr>
+    <tr><td><b>Obra:</b></td><td><b>C.P.:</b></td></tr>
+  </table>
+
+  <h2>DATOS DEL TRABAJADOR</h2>
+  <table class="info">
+    <tr><td style="width:60%"><b>Apellido y nombre:</b></td><td><b>DNI:</b></td></tr>
+    <tr><td><b>Puesto / Tarea:</b></td><td><b>Fecha de ingreso:</b> ____/____/______</td></tr>
+    <tr><td><b>Talle de ropa:</b> ________ &nbsp;&nbsp; <b>N° de calzado:</b> ________</td><td><b>Teléfono:</b></td></tr>
+  </table>
+
+  <h2>EPP NECESARIOS PARA EL PUESTO (marcar)</h2>
+  <div class="checks"><span>☐ Casco</span><span>☐ Anteojos de seguridad</span><span>☐ Protector facial</span><span>☐ Protector auditivo</span><span>☐ Barbijo / Respirador</span><span>☐ Guantes</span><span>☐ Calzado de seguridad</span><span>☐ Botas de goma</span><span>☐ Ropa de trabajo</span><span>☐ Chaleco reflectivo</span><span>☐ Arnés y cabo de vida</span><span>☐ Ropa de lluvia</span><span>☐ Delantal / Polainas</span><span>☐ Faja lumbar</span><span>☐ Otro: ____________</span></div>
+
+  <h2>DETALLE DE ENTREGAS</h2>
+  <table class="grid">
+    <tr>
+      <th style="width:5%">N°</th>
+      <th style="width:11%">Fecha</th>
+      <th style="width:17%">Elemento de protección (EPP)</th>
+      <th style="width:11%">Tipo / Modelo</th>
+      <th style="width:10%">Marca</th>
+      <th style="width:12%">¿Posee certificación?</th>
+      <th style="width:6%">Talle</th>
+      <th style="width:6%">Cant.</th>
+      <th style="width:7%">Motivo*</th>
+      <th>Firma del trabajador</th>
+    </tr>
+    <tr><td class="c">1</td><td class="c">___/___/___</td><td></td><td></td><td></td><td class="c">SÍ&nbsp;☐ NO&nbsp;☐</td><td></td><td></td><td></td><td></td></tr>
+    <tr><td class="c">2</td><td class="c">___/___/___</td><td></td><td></td><td></td><td class="c">SÍ&nbsp;☐ NO&nbsp;☐</td><td></td><td></td><td></td><td></td></tr>
+    <tr><td class="c">3</td><td class="c">___/___/___</td><td></td><td></td><td></td><td class="c">SÍ&nbsp;☐ NO&nbsp;☐</td><td></td><td></td><td></td><td></td></tr>
+    <tr><td class="c">4</td><td class="c">___/___/___</td><td></td><td></td><td></td><td class="c">SÍ&nbsp;☐ NO&nbsp;☐</td><td></td><td></td><td></td><td></td></tr>
+    <tr><td class="c">5</td><td class="c">___/___/___</td><td></td><td></td><td></td><td class="c">SÍ&nbsp;☐ NO&nbsp;☐</td><td></td><td></td><td></td><td></td></tr>
+    <tr><td class="c">6</td><td class="c">___/___/___</td><td></td><td></td><td></td><td class="c">SÍ&nbsp;☐ NO&nbsp;☐</td><td></td><td></td><td></td><td></td></tr>
+    <tr><td class="c">7</td><td class="c">___/___/___</td><td></td><td></td><td></td><td class="c">SÍ&nbsp;☐ NO&nbsp;☐</td><td></td><td></td><td></td><td></td></tr>
+    <tr><td class="c">8</td><td class="c">___/___/___</td><td></td><td></td><td></td><td class="c">SÍ&nbsp;☐ NO&nbsp;☐</td><td></td><td></td><td></td><td></td></tr>
+    <tr><td class="c">9</td><td class="c">___/___/___</td><td></td><td></td><td></td><td class="c">SÍ&nbsp;☐ NO&nbsp;☐</td><td></td><td></td><td></td><td></td></tr>
+    <tr><td class="c">10</td><td class="c">___/___/___</td><td></td><td></td><td></td><td class="c">SÍ&nbsp;☐ NO&nbsp;☐</td><td></td><td></td><td></td><td></td></tr>
+    <tr><td class="c">11</td><td class="c">___/___/___</td><td></td><td></td><td></td><td class="c">SÍ&nbsp;☐ NO&nbsp;☐</td><td></td><td></td><td></td><td></td></tr>
+    <tr><td class="c">12</td><td class="c">___/___/___</td><td></td><td></td><td></td><td class="c">SÍ&nbsp;☐ NO&nbsp;☐</td><td></td><td></td><td></td><td></td></tr>
+    <tr><td class="c">13</td><td class="c">___/___/___</td><td></td><td></td><td></td><td class="c">SÍ&nbsp;☐ NO&nbsp;☐</td><td></td><td></td><td></td><td></td></tr>
+    <tr><td class="c">14</td><td class="c">___/___/___</td><td></td><td></td><td></td><td class="c">SÍ&nbsp;☐ NO&nbsp;☐</td><td></td><td></td><td></td><td></td></tr>
+    <tr><td class="c">15</td><td class="c">___/___/___</td><td></td><td></td><td></td><td class="c">SÍ&nbsp;☐ NO&nbsp;☐</td><td></td><td></td><td></td><td></td></tr>
+    <tr><td class="c">16</td><td class="c">___/___/___</td><td></td><td></td><td></td><td class="c">SÍ&nbsp;☐ NO&nbsp;☐</td><td></td><td></td><td></td><td></td></tr>
+  </table>
+  <div class="legend">* <b>Motivo:</b> &nbsp;N = Nueva entrega &nbsp;·&nbsp; R = Reposición por desgaste &nbsp;·&nbsp; P = Pérdida &nbsp;·&nbsp; D = Daño / rotura &nbsp;·&nbsp; C = Cambio de talle</div>
+</section>
+
+<!-- ===================== HOJA 2 ===================== -->
+<section class="page">
+  <table class="info">
+    <tr>
+      <td style="width:60%"><b>Apellido y nombre del trabajador:</b></td>
+      <td><b>DNI:</b> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <b>Hoja:</b> 2 de 2</td>
+    </tr>
+  </table>
+
+  <h2>DETALLE DE ENTREGAS (continuación)</h2>
+  <table class="grid">
+    <tr>
+      <th style="width:5%">N°</th>
+      <th style="width:11%">Fecha</th>
+      <th style="width:17%">Elemento de protección (EPP)</th>
+      <th style="width:11%">Tipo / Modelo</th>
+      <th style="width:10%">Marca</th>
+      <th style="width:12%">¿Posee certificación?</th>
+      <th style="width:6%">Talle</th>
+      <th style="width:6%">Cant.</th>
+      <th style="width:7%">Motivo*</th>
+      <th>Firma del trabajador</th>
+    </tr>
+    <tr><td class="c">17</td><td class="c">___/___/___</td><td></td><td></td><td></td><td class="c">SÍ&nbsp;☐ NO&nbsp;☐</td><td></td><td></td><td></td><td></td></tr>
+    <tr><td class="c">18</td><td class="c">___/___/___</td><td></td><td></td><td></td><td class="c">SÍ&nbsp;☐ NO&nbsp;☐</td><td></td><td></td><td></td><td></td></tr>
+    <tr><td class="c">19</td><td class="c">___/___/___</td><td></td><td></td><td></td><td class="c">SÍ&nbsp;☐ NO&nbsp;☐</td><td></td><td></td><td></td><td></td></tr>
+    <tr><td class="c">20</td><td class="c">___/___/___</td><td></td><td></td><td></td><td class="c">SÍ&nbsp;☐ NO&nbsp;☐</td><td></td><td></td><td></td><td></td></tr>
+    <tr><td class="c">21</td><td class="c">___/___/___</td><td></td><td></td><td></td><td class="c">SÍ&nbsp;☐ NO&nbsp;☐</td><td></td><td></td><td></td><td></td></tr>
+    <tr><td class="c">22</td><td class="c">___/___/___</td><td></td><td></td><td></td><td class="c">SÍ&nbsp;☐ NO&nbsp;☐</td><td></td><td></td><td></td><td></td></tr>
+    <tr><td class="c">23</td><td class="c">___/___/___</td><td></td><td></td><td></td><td class="c">SÍ&nbsp;☐ NO&nbsp;☐</td><td></td><td></td><td></td><td></td></tr>
+    <tr><td class="c">24</td><td class="c">___/___/___</td><td></td><td></td><td></td><td class="c">SÍ&nbsp;☐ NO&nbsp;☐</td><td></td><td></td><td></td><td></td></tr>
+    <tr><td class="c">25</td><td class="c">___/___/___</td><td></td><td></td><td></td><td class="c">SÍ&nbsp;☐ NO&nbsp;☐</td><td></td><td></td><td></td><td></td></tr>
+    <tr><td class="c">26</td><td class="c">___/___/___</td><td></td><td></td><td></td><td class="c">SÍ&nbsp;☐ NO&nbsp;☐</td><td></td><td></td><td></td><td></td></tr>
+    <tr><td class="c">27</td><td class="c">___/___/___</td><td></td><td></td><td></td><td class="c">SÍ&nbsp;☐ NO&nbsp;☐</td><td></td><td></td><td></td><td></td></tr>
+    <tr><td class="c">28</td><td class="c">___/___/___</td><td></td><td></td><td></td><td class="c">SÍ&nbsp;☐ NO&nbsp;☐</td><td></td><td></td><td></td><td></td></tr>
+    <tr><td class="c">29</td><td class="c">___/___/___</td><td></td><td></td><td></td><td class="c">SÍ&nbsp;☐ NO&nbsp;☐</td><td></td><td></td><td></td><td></td></tr>
+    <tr><td class="c">30</td><td class="c">___/___/___</td><td></td><td></td><td></td><td class="c">SÍ&nbsp;☐ NO&nbsp;☐</td><td></td><td></td><td></td><td></td></tr>
+    <tr><td class="c">31</td><td class="c">___/___/___</td><td></td><td></td><td></td><td class="c">SÍ&nbsp;☐ NO&nbsp;☐</td><td></td><td></td><td></td><td></td></tr>
+    <tr><td class="c">32</td><td class="c">___/___/___</td><td></td><td></td><td></td><td class="c">SÍ&nbsp;☐ NO&nbsp;☐</td><td></td><td></td><td></td><td></td></tr>
+    <tr><td class="c">33</td><td class="c">___/___/___</td><td></td><td></td><td></td><td class="c">SÍ&nbsp;☐ NO&nbsp;☐</td><td></td><td></td><td></td><td></td></tr>
+    <tr><td class="c">34</td><td class="c">___/___/___</td><td></td><td></td><td></td><td class="c">SÍ&nbsp;☐ NO&nbsp;☐</td><td></td><td></td><td></td><td></td></tr>
+  </table>
+  <div class="legend">* <b>Motivo:</b> &nbsp;N = Nueva entrega &nbsp;·&nbsp; R = Reposición por desgaste &nbsp;·&nbsp; P = Pérdida &nbsp;·&nbsp; D = Daño / rotura &nbsp;·&nbsp; C = Cambio de talle</div>
+
+  <h2>INFORMACIÓN ADICIONAL / OBSERVACIONES</h2>
+  <div class="lines"><div></div><div></div><div></div></div>
+
+  <h2>DECLARACIÓN DEL TRABAJADOR</h2>
+  <div class="decl">Declaro haber recibido los elementos de protección personal detallados en esta planilla, en buen estado y en forma gratuita, y haber sido capacitado sobre su uso correcto, cuidado y conservación. Me comprometo a utilizarlos durante toda la jornada de trabajo y a solicitar su reposición en caso de desgaste, pérdida o rotura.</div>
+
+  <div class="sign">
+    <div class="box">
+      <h3>TRABAJADOR</h3>
+      <div class="space"></div>
+      <p><b>Firma</b></p>
+      <p><b>Aclaración:</b> ______________________________</p>
+      <p><b>DNI:</b> ____________________</p>
+    </div>
+    <div class="box">
+      <h3>RESPONSABLE DE SEGURIDAD E HIGIENE</h3>
+      <div class="space"></div>
+      <p><b>Firma</b></p>
+      <p><b>Aclaración:</b> ______________________________</p>
+      <p><b>Matrícula:</b> ____________________</p>
+    </div>
+  </div>
+</section>
+
+</body>
+</html>
