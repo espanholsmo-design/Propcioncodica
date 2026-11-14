@@ -7,7 +7,10 @@
       "name": "Ejecutar manualmente",
       "type": "n8n-nodes-base.manualTrigger",
       "typeVersion": 1,
-      "position": [180, 500]
+      "position": [
+        180,
+        500
+      ]
     },
     {
       "parameters": {
@@ -30,6 +33,12 @@
               "name": "title",
               "type": "string",
               "value": "Título corto para YouTube Shorts"
+            },
+            {
+              "id": "maxIntentosIG",
+              "name": "maxIntentosIG",
+              "type": "number",
+              "value": 18
             }
           ]
         }
@@ -38,9 +47,11 @@
       "name": "Datos del video",
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
-      "position": [400, 500]
+      "position": [
+        400,
+        500
+      ]
     },
-
     {
       "parameters": {
         "method": "POST",
@@ -48,10 +59,22 @@
         "sendQuery": true,
         "queryParameters": {
           "parameters": [
-            { "name": "media_type", "value": "REELS" },
-            { "name": "video_url", "value": "={{$json.videoUrl}}" },
-            { "name": "caption", "value": "={{$json.caption}}" },
-            { "name": "access_token", "value": "={{$env.META_IG_ACCESS_TOKEN}}" }
+            {
+              "name": "media_type",
+              "value": "REELS"
+            },
+            {
+              "name": "video_url",
+              "value": "={{$json.videoUrl}}"
+            },
+            {
+              "name": "caption",
+              "value": "={{$json.caption}}"
+            },
+            {
+              "name": "access_token",
+              "value": "={{$env.META_IG_ACCESS_TOKEN}}"
+            }
           ]
         },
         "options": {}
@@ -60,15 +83,177 @@
       "name": "Crear Reel IG (container)",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [660, 120]
+      "position": [
+        660,
+        120
+      ]
     },
     {
-      "parameters": { "amount": 30, "unit": "seconds" },
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "attempts",
+              "name": "attempts",
+              "type": "number",
+              "value": 0
+            }
+          ]
+        }
+      },
+      "id": "ig-init-attempts",
+      "name": "Inicializar intentos IG",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        880,
+        120
+      ]
+    },
+    {
+      "parameters": {
+        "amount": 10,
+        "unit": "seconds"
+      },
       "id": "ig-wait",
       "name": "Esperar procesamiento IG",
       "type": "n8n-nodes-base.wait",
       "typeVersion": 1.1,
-      "position": [900, 120]
+      "position": [
+        1100,
+        120
+      ]
+    },
+    {
+      "parameters": {
+        "method": "GET",
+        "url": "=https://graph.facebook.com/v19.0/{{$('Crear Reel IG (container)').item.json.id}}",
+        "sendQuery": true,
+        "queryParameters": {
+          "parameters": [
+            {
+              "name": "fields",
+              "value": "status_code"
+            },
+            {
+              "name": "access_token",
+              "value": "={{$env.META_IG_ACCESS_TOKEN}}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "ig-check-status",
+      "name": "Consultar estado Reel IG",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        1320,
+        120
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 2000,
+      "alwaysOutputData": true
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "ig-status-finished",
+              "leftValue": "={{$json.status_code}}",
+              "rightValue": "FINISHED",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "ig-if-finished",
+      "name": "¿Terminó de procesar?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1540,
+        120
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "attempts",
+              "name": "attempts",
+              "type": "number",
+              "value": "={{$('Esperar procesamiento IG').item.json.attempts + 1}}"
+            }
+          ]
+        }
+      },
+      "id": "ig-increment-attempts",
+      "name": "Incrementar intentos IG",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1540,
+        280
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict"
+          },
+          "combinator": "and",
+          "conditions": [
+            {
+              "id": "ig-attempts-left",
+              "leftValue": "={{$json.attempts}}",
+              "rightValue": "={{$('Datos del video').item.json.maxIntentosIG}}",
+              "operator": {
+                "type": "number",
+                "operation": "lte"
+              }
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "ig-check-timeout",
+      "name": "¿Quedan intentos?",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1760,
+        280
+      ]
+    },
+    {
+      "parameters": {
+        "errorMessage": "=Instagram no terminó de procesar el Reel después de {{$('Datos del video').item.json.maxIntentosIG}} intentos (~{{$('Datos del video').item.json.maxIntentosIG * 10}}s). Revisar el video o reintentar manualmente."
+      },
+      "id": "ig-timeout-error",
+      "name": "Error: timeout IG",
+      "type": "n8n-nodes-base.stopAndError",
+      "typeVersion": 1,
+      "position": [
+        1980,
+        400
+      ]
     },
     {
       "parameters": {
@@ -77,8 +262,14 @@
         "sendQuery": true,
         "queryParameters": {
           "parameters": [
-            { "name": "creation_id", "value": "={{$json.id}}" },
-            { "name": "access_token", "value": "={{$env.META_IG_ACCESS_TOKEN}}" }
+            {
+              "name": "creation_id",
+              "value": "={{$('Crear Reel IG (container)').item.json.id}}"
+            },
+            {
+              "name": "access_token",
+              "value": "={{$env.META_IG_ACCESS_TOKEN}}"
+            }
           ]
         },
         "options": {}
@@ -87,9 +278,11 @@
       "name": "Publicar Reel IG",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [1140, 120]
+      "position": [
+        1620,
+        40
+      ]
     },
-
     {
       "parameters": {
         "method": "POST",
@@ -97,8 +290,14 @@
         "sendQuery": true,
         "queryParameters": {
           "parameters": [
-            { "name": "upload_phase", "value": "start" },
-            { "name": "access_token", "value": "={{$env.META_PAGE_ACCESS_TOKEN}}" }
+            {
+              "name": "upload_phase",
+              "value": "start"
+            },
+            {
+              "name": "access_token",
+              "value": "={{$env.META_PAGE_ACCESS_TOKEN}}"
+            }
           ]
         },
         "options": {}
@@ -107,7 +306,10 @@
       "name": "Iniciar Reel FB",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [660, 350]
+      "position": [
+        660,
+        350
+      ]
     },
     {
       "parameters": {
@@ -115,7 +317,10 @@
         "url": "={{$('Datos del video').item.json.videoUrl}}",
         "options": {
           "response": {
-            "response": { "responseFormat": "file", "outputPropertyName": "data" }
+            "response": {
+              "responseFormat": "file",
+              "outputPropertyName": "data"
+            }
           }
         }
       },
@@ -123,7 +328,14 @@
       "name": "Descargar video (para FB)",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [900, 350]
+      "position": [
+        900,
+        350
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 2000,
+      "alwaysOutputData": true
     },
     {
       "parameters": {
@@ -135,7 +347,10 @@
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
-            { "name": "Authorization", "value": "=OAuth {{$env.META_PAGE_ACCESS_TOKEN}}" }
+            {
+              "name": "Authorization",
+              "value": "=OAuth {{$env.META_PAGE_ACCESS_TOKEN}}"
+            }
           ]
         },
         "options": {}
@@ -144,7 +359,10 @@
       "name": "Subir video a FB",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [1140, 350]
+      "position": [
+        1140,
+        350
+      ]
     },
     {
       "parameters": {
@@ -153,11 +371,26 @@
         "sendQuery": true,
         "queryParameters": {
           "parameters": [
-            { "name": "upload_phase", "value": "finish" },
-            { "name": "video_id", "value": "={{$('Iniciar Reel FB').item.json.video_id}}" },
-            { "name": "video_state", "value": "PUBLISHED" },
-            { "name": "description", "value": "={{$('Datos del video').item.json.caption}}" },
-            { "name": "access_token", "value": "={{$env.META_PAGE_ACCESS_TOKEN}}" }
+            {
+              "name": "upload_phase",
+              "value": "finish"
+            },
+            {
+              "name": "video_id",
+              "value": "={{$('Iniciar Reel FB').item.json.video_id}}"
+            },
+            {
+              "name": "video_state",
+              "value": "PUBLISHED"
+            },
+            {
+              "name": "description",
+              "value": "={{$('Datos del video').item.json.caption}}"
+            },
+            {
+              "name": "access_token",
+              "value": "={{$env.META_PAGE_ACCESS_TOKEN}}"
+            }
           ]
         },
         "options": {}
@@ -166,9 +399,11 @@
       "name": "Finalizar Reel FB",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [1380, 350]
+      "position": [
+        1380,
+        350
+      ]
     },
-
     {
       "parameters": {
         "method": "POST",
@@ -176,8 +411,14 @@
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
-            { "name": "Authorization", "value": "=Bearer {{$env.TIKTOK_ACCESS_TOKEN}}" },
-            { "name": "Content-Type", "value": "application/json" }
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{$env.TIKTOK_ACCESS_TOKEN}}"
+            },
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
           ]
         },
         "sendBody": true,
@@ -190,16 +431,21 @@
       "name": "Publicar en TikTok",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [660, 620]
+      "position": [
+        660,
+        620
+      ]
     },
-
     {
       "parameters": {
         "method": "GET",
         "url": "={{$json.videoUrl}}",
         "options": {
           "response": {
-            "response": { "responseFormat": "file", "outputPropertyName": "data" }
+            "response": {
+              "responseFormat": "file",
+              "outputPropertyName": "data"
+            }
           }
         }
       },
@@ -207,7 +453,14 @@
       "name": "Descargar video (para YouTube)",
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
-      "position": [660, 850]
+      "position": [
+        660,
+        850
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 2000,
+      "alwaysOutputData": true
     },
     {
       "parameters": {
@@ -217,47 +470,197 @@
         "regionCode": "AR",
         "categoryId": "22",
         "binaryPropertyName": "data",
-        "options": { "privacyStatus": "public" }
+        "options": {
+          "privacyStatus": "public"
+        }
       },
       "id": "yt-publicar",
       "name": "Publicar YouTube Short",
       "type": "n8n-nodes-base.youTube",
       "typeVersion": 1,
-      "position": [900, 850],
-      "credentials": { "youTubeOAuth2Api": { "name": "YouTube account" } }
+      "position": [
+        900,
+        850
+      ],
+      "credentials": {
+        "youTubeOAuth2Api": {
+          "name": "YouTube account"
+        }
+      }
     }
   ],
   "connections": {
     "Ejecutar manualmente": {
-      "main": [[{ "node": "Datos del video", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Datos del video",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Datos del video": {
       "main": [
         [
-          { "node": "Crear Reel IG (container)", "type": "main", "index": 0 },
-          { "node": "Iniciar Reel FB", "type": "main", "index": 0 },
-          { "node": "Publicar en TikTok", "type": "main", "index": 0 },
-          { "node": "Descargar video (para YouTube)", "type": "main", "index": 0 }
+          {
+            "node": "Crear Reel IG (container)",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Iniciar Reel FB",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Publicar en TikTok",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Descargar video (para YouTube)",
+            "type": "main",
+            "index": 0
+          }
         ]
       ]
     },
     "Crear Reel IG (container)": {
-      "main": [[{ "node": "Esperar procesamiento IG", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Inicializar intentos IG",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Inicializar intentos IG": {
+      "main": [
+        [
+          {
+            "node": "Esperar procesamiento IG",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Esperar procesamiento IG": {
-      "main": [[{ "node": "Publicar Reel IG", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Consultar estado Reel IG",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Consultar estado Reel IG": {
+      "main": [
+        [
+          {
+            "node": "¿Terminó de procesar?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Terminó de procesar?": {
+      "main": [
+        [
+          {
+            "node": "Publicar Reel IG",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Incrementar intentos IG",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Incrementar intentos IG": {
+      "main": [
+        [
+          {
+            "node": "¿Quedan intentos?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Quedan intentos?": {
+      "main": [
+        [
+          {
+            "node": "Esperar procesamiento IG",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Error: timeout IG",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Iniciar Reel FB": {
-      "main": [[{ "node": "Descargar video (para FB)", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Descargar video (para FB)",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Descargar video (para FB)": {
-      "main": [[{ "node": "Subir video a FB", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Subir video a FB",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Subir video a FB": {
-      "main": [[{ "node": "Finalizar Reel FB", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Finalizar Reel FB",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     },
     "Descargar video (para YouTube)": {
-      "main": [[{ "node": "Publicar YouTube Short", "type": "main", "index": 0 }]]
+      "main": [
+        [
+          {
+            "node": "Publicar YouTube Short",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
     }
   },
   "active": false,

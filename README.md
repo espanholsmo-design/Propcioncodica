@@ -66,9 +66,25 @@ En la UI de n8n (el navegador que ya tenés abierto):
 
 Misma app de Meta que ya tenías para fotos, pero necesitás además el permiso
 `instagram_content_publish` (ya lo pedís) y que la cuenta de IG sea Business/
-Creator vinculada a la Page. El nodo "Esperar procesamiento IG" usa una
-espera fija de 30s; si el video es largo, Meta puede tardar más — conviene
-reemplazarlo por un loop que consulte `status_code` hasta `FINISHED`.
+Creator vinculada a la Page. La rama de Instagram hace polling real y con
+tope de intentos:
+
+**Esperar procesamiento IG** (10s) → **Consultar estado Reel IG**
+(`status_code`, con 3 reintentos automáticos si falla la llamada) →
+**¿Terminó de procesar?** — si `FINISHED`, publica; si no, pasa por
+**Incrementar intentos IG** → **¿Quedan intentos?** (tope configurable en
+el campo `maxIntentosIG` del nodo **Datos del video**, 18 por defecto ≈ 3
+minutos) y vuelve a esperar, o si se agotaron los intentos corta la
+ejecución con un error explícito (**Error: timeout IG**) en vez de
+quedarse esperando para siempre.
+
+Las descargas de video (para Facebook y YouTube) también reintentan 3
+veces ante fallas de red. Los `POST` que crean o publican contenido
+(crear container, publicar, subir binario a FB, publicar en TikTok/
+YouTube) **no** tienen reintento automático a propósito: reintentar un
+POST que ya tuvo éxito pero cuya respuesta se perdió podría duplicar la
+publicación. Si falla alguno de esos pasos, hay que revisar el error y
+decidir manualmente si reintentar.
 
 ### TikTok
 
@@ -99,8 +115,8 @@ reemplazarlo por un loop que consulte `status_code` hasta `FINISHED`.
   visualmente en el navegador — n8n permite ambas cosas sobre el mismo
   archivo si lo reimportás.
 - Le pedís a Claude Code que genere variantes del workflow (agregar Stories,
-  polling real de estado en vez de espera fija, refresco de token de
-  TikTok, programar el envío con un Cron Trigger, etc.).
+  refresco automático del token de TikTok, programar el envío con un Cron
+  Trigger, etc.).
 - El posteo real siempre sale por las APIs oficiales de cada plataforma
   (Graph API de Meta, TikTok Content Posting API, YouTube Data API), nunca
   por un login automatizado del navegador.
