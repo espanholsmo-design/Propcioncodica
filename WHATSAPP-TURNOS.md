@@ -10,7 +10,7 @@ Cliente escribe ─► n8n ─► Claude (asistente) ─► responde por WhatsAp
                               │
                               ├─ ver_agenda        (Google Calendar)
                               ├─ reservar_turno    (evento "PENDIENTE SEÑA")
-                              └─ crear_link_de_pago (Mercado Pago)
+                              └─ crear_link_de_pago[_biomagnetismo] (Mercado Pago)
 
 Mercado Pago avisa el pago ─► n8n ─► evento "CONFIRMADO" ─► WhatsApp "¡Listo!"
 Cada 15 min ─► señas no pagadas en 70 min ─► se borra el evento ─► aviso
@@ -43,8 +43,13 @@ podés cambiar el tono o las reglas escribiendo en castellano ahí mismo.
   Biomagnetismo.
 - Todas con terapia de sonido con diapasones.
 
-Precios, seña, política de cancelación, dirección y nombre de la terapeuta
-se completan en el nodo **Configuración del negocio**: es el único lugar
+**Señas**: Biomagnetismo **$30.000**; el resto de los servicios, un mismo
+monto para todos (`sena_monto_ars`). Hay dos herramientas de pago separadas
+(`crear_link_de_pago` y `crear_link_de_pago_biomagnetismo`), así el monto
+sale siempre de la configuración y nunca lo "elige" la IA.
+
+Precios, montos de seña, política de cancelación, dirección y nombre de la
+terapeuta se completan en el nodo **Configuración del negocio**: es el único lugar
 que tenés que tocar cuando cambian.
 
 ---
