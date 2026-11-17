@@ -53,6 +53,12 @@ Hay dos herramientas de pago separadas, `crear_link_de_pago` (sesiones de
 1 h) y `crear_link_de_pago_2_horas` (Biomagnetismo y Bio Spa Facial). Así
 el monto sale siempre de la configuración y nunca lo elige la IA.
 
+**Cuotas en Biomagnetismo:** el total se puede pagar en 3 cuotas sin
+interés o hasta 6 con recargo. Cada vez que el asistente dice el precio de
+Biomagnetismo, en la misma frase cuenta lo de las cuotas y que para
+reservar alcanza con la seña de $30.000. El texto se cambia en
+`financiacion_biomagnetismo` (nodo **Configuración del negocio**).
+
 **Preparación de Biomagnetismo:** cuando se paga la seña de un turno de
 Biomagnetismo, además de la confirmación se manda por WhatsApp un mensaje
 con la preparación. El texto se escribe en el nodo **Preparación para
