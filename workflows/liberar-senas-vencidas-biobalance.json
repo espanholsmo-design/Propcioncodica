@@ -188,7 +188,7 @@
         "operation": "send",
         "phoneNumberId": "={{ $env.WHATSAPP_PHONE_NUMBER_ID }}",
         "recipientPhoneNumber": "={{ $env.AVISOS_WHATSAPP }}",
-        "textBody": "=⌛ Se liberó un horario (no pagaron la seña a tiempo)\\n{{ $('¿Seña vencida?').item.json.summary.replace('PENDIENTE SEÑA - ', '') }}\\n{{ DateTime.fromISO($('¿Seña vencida?').item.json.start.dateTime).setZone('America/Argentina/Buenos_Aires').setLocale('es').toFormat(\"cccc d 'de' LLLL, HH:mm\") }} hs",
+        "textBody": "=⌛ Se liberó un horario (no pagaron la seña a tiempo)\n{{ $('¿Seña vencida?').item.json.summary.replace('PENDIENTE SEÑA - ', '') }}\n{{ DateTime.fromISO($('¿Seña vencida?').item.json.start.dateTime).setZone('America/Argentina/Buenos_Aires').setLocale('es').toFormat(\"cccc d 'de' LLLL, HH:mm\") }} hs",
         "additionalFields": {}
       },
       "id": "av-wa",
@@ -212,7 +212,7 @@
         "sendTo": "={{ $env.AVISOS_EMAIL || 'biobalance.consultas@gmail.com' }}",
         "subject": "BioBalance - aviso de turnos",
         "emailType": "text",
-        "message": "=⌛ Se liberó un horario (no pagaron la seña a tiempo)\\n{{ $('¿Seña vencida?').item.json.summary.replace('PENDIENTE SEÑA - ', '') }}\\n{{ DateTime.fromISO($('¿Seña vencida?').item.json.start.dateTime).setZone('America/Argentina/Buenos_Aires').setLocale('es').toFormat(\"cccc d 'de' LLLL, HH:mm\") }} hs",
+        "message": "=⌛ Se liberó un horario (no pagaron la seña a tiempo)\n{{ $('¿Seña vencida?').item.json.summary.replace('PENDIENTE SEÑA - ', '') }}\n{{ DateTime.fromISO($('¿Seña vencida?').item.json.start.dateTime).setZone('America/Argentina/Buenos_Aires').setLocale('es').toFormat(\"cccc d 'de' LLLL, HH:mm\") }} hs",
         "options": {
           "appendAttribution": false
         }

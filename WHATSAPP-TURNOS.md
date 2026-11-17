@@ -55,11 +55,19 @@ el monto sale siempre de la configuración y nunca lo elige la IA.
 
 **Cómo funciona la seña** (el asistente lo aclara siempre que habla de la
 seña o manda el link, para que nadie piense que paga dos veces):
-- Se paga **en un solo pago** por Mercado Pago (el link no permite cuotas).
+- Se paga **en un solo pago**, sin cuotas, de dos formas:
+  - **Link de Mercado Pago**: el turno se confirma solo al acreditarse.
+  - **Transferencia al alias `biobalance.so`**: la persona manda la foto o
+    el PDF del comprobante por el chat. El asistente le agradece, el turno
+    pasa a **COMPROBANTE A REVISAR** en la agenda (en amarillo, y ya no se
+    libera solo) y a Silvina le llega un aviso. Silvina revisa que la
+    transferencia esté acreditada, cambia el título a **CONFIRMADO** y le
+    escribe. En este caso el mensaje de preparación de Biomagnetismo hay
+    que mandarlo a mano.
 - **Se descuenta del total**: no es un costo extra.
 - **El resto se paga el día de la sesión**, y ahí la persona elige la forma
   de pago. En **Biomagnetismo y Bio Spa Facial** puede ser en hasta 3
-  cuotas sin interés o en 6 con interés. Cuando el asistente dice el precio
+  cuotas sin interés o en 6 con interés, y eso se acuerda en persona. Cuando el asistente dice el precio
   de alguno de los dos, lo aclara en la misma frase (texto en
   `financiacion_2_horas`, nodo **Configuración del negocio**).
 
