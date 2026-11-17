@@ -62,8 +62,10 @@ reservar alcanza con la seña de $30.000. El texto se cambia en
 **Preparación de Biomagnetismo:** cuando se paga la seña de un turno de
 Biomagnetismo, además de la confirmación se manda por WhatsApp un mensaje
 con la preparación. El texto se escribe en el nodo **Preparación para
-Biomagnetismo** del workflow de Mercado Pago. Mientras diga "COMPLETAR",
-no se manda nada.
+Biomagnetismo** del workflow de Mercado Pago. Ya está cargado
+(hidratación con sal marina si no hay hipertensión, ropa cómoda,
+zapatillas, sin pulseras/anillos/piercings, no comer 30 min antes y sin
+estimulantes 2 h antes).
 
 Dirección: **Juana Azurduy 2080, Santa Rosa, La Pampa**.
 
