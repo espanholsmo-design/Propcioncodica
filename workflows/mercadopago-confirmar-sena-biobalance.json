@@ -1,0 +1,322 @@
+{
+  "name": "BioBalance - Confirmar turno al pagar la seña (Mercado Pago)",
+  "nodes": [
+    {
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "mercadopago-biobalance",
+        "responseMode": "onReceived",
+        "options": {}
+      },
+      "id": "mp-webhook",
+      "name": "Mercado Pago - notificación",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2,
+      "position": [
+        0,
+        300
+      ],
+      "webhookId": "mercadopago-biobalance"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "tipo",
+              "leftValue": "={{ $json.body.type ?? $json.query.topic ?? $json.query.type }}",
+              "rightValue": "payment",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "id": "es-pago",
+      "name": "¿Es un pago?",
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        220,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "url": "=https://api.mercadopago.com/v1/payments/{{ $json.body.data?.id ?? $json.query['data.id'] ?? $json.query.id }}",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {
+              "name": "Authorization",
+              "value": "=Bearer {{ $env.MP_ACCESS_TOKEN }}"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "mp-get",
+      "name": "Consultar pago en Mercado Pago",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        440,
+        300
+      ],
+      "retryOnFail": true,
+      "maxTries": 3,
+      "waitBetweenTries": 2000
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "st",
+              "leftValue": "={{ $json.status }}",
+              "rightValue": "approved",
+              "operator": {
+                "type": "string",
+                "operation": "equals"
+              }
+            },
+            {
+              "id": "ref",
+              "leftValue": "={{ $json.external_reference }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "id": "aprobado",
+      "name": "¿Pago aprobado?",
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        660,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "get",
+        "calendar": {
+          "__rl": true,
+          "mode": "id",
+          "value": "={{ $env.GOOGLE_CALENDAR_ID }}"
+        },
+        "eventId": "={{ $json.external_reference }}",
+        "options": {}
+      },
+      "id": "get-evento",
+      "name": "Buscar turno",
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        880,
+        300
+      ],
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "pend",
+              "leftValue": "={{ $json.summary }}",
+              "rightValue": "PENDIENTE SEÑA",
+              "operator": {
+                "type": "string",
+                "operation": "startsWith"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "id": "pendiente",
+      "name": "¿Seguía pendiente?",
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        1100,
+        300
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "update",
+        "calendar": {
+          "__rl": true,
+          "mode": "id",
+          "value": "={{ $env.GOOGLE_CALENDAR_ID }}"
+        },
+        "eventId": "={{ $json.id }}",
+        "updateFields": {
+          "summary": "={{ $json.summary.replace('PENDIENTE SEÑA', 'CONFIRMADO') }}",
+          "description": "={{ $json.description }}\nSeña pagada: ${{ $('Consultar pago en Mercado Pago').item.json.transaction_amount }} (pago MP {{ $('Consultar pago en Mercado Pago').item.json.id }})",
+          "color": "10"
+        }
+      },
+      "id": "confirmar",
+      "name": "Marcar turno CONFIRMADO",
+      "type": "n8n-nodes-base.googleCalendar",
+      "typeVersion": 1.3,
+      "position": [
+        1320,
+        300
+      ],
+      "credentials": {
+        "googleCalendarOAuth2Api": {
+          "id": "",
+          "name": "Google Calendar account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "operation": "send",
+        "phoneNumberId": "={{ $env.WHATSAPP_PHONE_NUMBER_ID }}",
+        "recipientPhoneNumber": "={{ $('Consultar pago en Mercado Pago').item.json.metadata.telefono }}",
+        "textBody": "=¡Listo! 🦋 Recibimos tu seña y tu turno quedó confirmado:\n\n✨ {{ $json.summary.replace('CONFIRMADO - ', '') }}\n📅 {{ DateTime.fromISO($json.start.dateTime).setZone('America/Argentina/Buenos_Aires').setLocale('es').toFormat(\"cccc d 'de' LLLL, HH:mm\") }} hs\n\nTe esperamos en BioBalance 🌿 Si necesitás reprogramar, avisanos con 24 hs de anticipación.",
+        "additionalFields": {}
+      },
+      "id": "wa-confirmar",
+      "name": "Avisar confirmación por WhatsApp",
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1.1,
+      "position": [
+        1540,
+        300
+      ],
+      "credentials": {
+        "whatsAppApi": {
+          "id": "",
+          "name": "WhatsApp account"
+        }
+      }
+    }
+  ],
+  "connections": {
+    "Mercado Pago - notificación": {
+      "main": [
+        [
+          {
+            "node": "¿Es un pago?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Es un pago?": {
+      "main": [
+        [
+          {
+            "node": "Consultar pago en Mercado Pago",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Consultar pago en Mercado Pago": {
+      "main": [
+        [
+          {
+            "node": "¿Pago aprobado?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Pago aprobado?": {
+      "main": [
+        [
+          {
+            "node": "Buscar turno",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Buscar turno": {
+      "main": [
+        [
+          {
+            "node": "¿Seguía pendiente?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Seguía pendiente?": {
+      "main": [
+        [
+          {
+            "node": "Marcar turno CONFIRMADO",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Marcar turno CONFIRMADO": {
+      "main": [
+        [
+          {
+            "node": "Avisar confirmación por WhatsApp",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "timezone": "America/Argentina/Buenos_Aires"
+  }
+}

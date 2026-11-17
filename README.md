@@ -25,6 +25,11 @@ Playwright) como paso aparte — pero no para el login de la cuenta.
 - `workflows/publicar-video-viral-biobalance.json` — workflow para **video**:
   toma `videoUrl` + `caption` + `title` y publica en paralelo como Instagram
   Reel, Facebook Reel, TikTok y YouTube Short.
+- `workflows/whatsapp-asistente-turnos-biobalance.json`,
+  `workflows/mercadopago-confirmar-sena-biobalance.json` y
+  `workflows/liberar-senas-vencidas-biobalance.json` — **asistente de
+  turnos por WhatsApp** con seña por Mercado Pago. Guía completa en
+  [`WHATSAPP-TURNOS.md`](WHATSAPP-TURNOS.md).
 - `.mcp.json` — conecta Claude Code (en VS Code) con tu instancia de n8n vía
   MCP, para poder crear/editar/disparar workflows desde el chat.
 - `.env.example` — variables que necesitás completar.
