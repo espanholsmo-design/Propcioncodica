@@ -233,7 +233,58 @@
           "id": "",
           "name": "WhatsApp account"
         }
-      }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "operation": "send",
+        "phoneNumberId": "={{ $env.WHATSAPP_PHONE_NUMBER_ID }}",
+        "recipientPhoneNumber": "={{ $env.AVISOS_WHATSAPP }}",
+        "textBody": "=✅ Seña pagada (${{ $('Consultar pago en Mercado Pago').item.json.transaction_amount }})\\n{{ $('Marcar turno CONFIRMADO').item.json.summary.replace('CONFIRMADO - ', '') }}\\n{{ DateTime.fromISO($('Marcar turno CONFIRMADO').item.json.start.dateTime).setZone('America/Argentina/Buenos_Aires').setLocale('es').toFormat(\"cccc d 'de' LLLL, HH:mm\") }} hs — turno confirmado",
+        "additionalFields": {}
+      },
+      "id": "av-wa",
+      "name": "Avisarme por WhatsApp",
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1.1,
+      "position": [
+        1760,
+        300
+      ],
+      "credentials": {
+        "whatsAppApi": {
+          "id": "",
+          "name": "WhatsApp account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $env.AVISOS_EMAIL }}",
+        "subject": "BioBalance - aviso de turnos",
+        "emailType": "text",
+        "message": "=✅ Seña pagada (${{ $('Consultar pago en Mercado Pago').item.json.transaction_amount }})\\n{{ $('Marcar turno CONFIRMADO').item.json.summary.replace('CONFIRMADO - ', '') }}\\n{{ DateTime.fromISO($('Marcar turno CONFIRMADO').item.json.start.dateTime).setZone('America/Argentina/Buenos_Aires').setLocale('es').toFormat(\"cccc d 'de' LLLL, HH:mm\") }} hs — turno confirmado",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "id": "av-mail",
+      "name": "Avisarme por mail",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1760,
+        460
+      ],
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "",
+          "name": "Gmail account"
+        }
+      },
+      "onError": "continueRegularOutput"
     }
   ],
   "connections": {
@@ -308,6 +359,22 @@
         [
           {
             "node": "Avisar confirmación por WhatsApp",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Avisar confirmación por WhatsApp": {
+      "main": [
+        [
+          {
+            "node": "Avisarme por WhatsApp",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Avisarme por mail",
             "type": "main",
             "index": 0
           }

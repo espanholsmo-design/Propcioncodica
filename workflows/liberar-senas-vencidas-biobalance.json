@@ -147,6 +147,56 @@
         }
       },
       "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "operation": "send",
+        "phoneNumberId": "={{ $env.WHATSAPP_PHONE_NUMBER_ID }}",
+        "recipientPhoneNumber": "={{ $env.AVISOS_WHATSAPP }}",
+        "textBody": "=⌛ Se liberó un horario (no pagaron la seña a tiempo)\\n{{ $('¿Seña vencida?').item.json.summary.replace('PENDIENTE SEÑA - ', '') }}\\n{{ DateTime.fromISO($('¿Seña vencida?').item.json.start.dateTime).setZone('America/Argentina/Buenos_Aires').setLocale('es').toFormat(\"cccc d 'de' LLLL, HH:mm\") }} hs",
+        "additionalFields": {}
+      },
+      "id": "av-wa",
+      "name": "Avisarme por WhatsApp",
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1.1,
+      "position": [
+        1100,
+        300
+      ],
+      "credentials": {
+        "whatsAppApi": {
+          "id": "",
+          "name": "WhatsApp account"
+        }
+      },
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "sendTo": "={{ $env.AVISOS_EMAIL }}",
+        "subject": "BioBalance - aviso de turnos",
+        "emailType": "text",
+        "message": "=⌛ Se liberó un horario (no pagaron la seña a tiempo)\\n{{ $('¿Seña vencida?').item.json.summary.replace('PENDIENTE SEÑA - ', '') }}\\n{{ DateTime.fromISO($('¿Seña vencida?').item.json.start.dateTime).setZone('America/Argentina/Buenos_Aires').setLocale('es').toFormat(\"cccc d 'de' LLLL, HH:mm\") }} hs",
+        "options": {
+          "appendAttribution": false
+        }
+      },
+      "id": "av-mail",
+      "name": "Avisarme por mail",
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.1,
+      "position": [
+        1100,
+        460
+      ],
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "",
+          "name": "Gmail account"
+        }
+      },
+      "onError": "continueRegularOutput"
     }
   ],
   "connections": {
@@ -188,6 +238,22 @@
         [
           {
             "node": "Avisar que se liberó",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Avisar que se liberó": {
+      "main": [
+        [
+          {
+            "node": "Avisarme por WhatsApp",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Avisarme por mail",
             "type": "main",
             "index": 0
           }

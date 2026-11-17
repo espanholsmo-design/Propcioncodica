@@ -27,8 +27,8 @@ Cada 15 min ─► señas no pagadas en 70 min ─► se borra el evento ─► 
 ## Cómo se comporta con el precio
 
 El asistente **no arranca hablando de plata**: primero pregunta qué le pasa a
-la persona, le cuenta en qué consiste la sesión y que todas incluyen terapia
-de sonido con diapasones. Si le preguntan el precio **directamente, lo dice
+la persona, le cuenta en qué consiste la sesión y que todas se acompañan con
+terapia de sonido: frecuencias y diapasones. Si le preguntan el precio **directamente, lo dice
 claro** (esconderlo genera desconfianza), siempre acompañado de lo que
 incluye. Con Biomagnetismo cuenta primero por qué la sesión dura 2 horas.
 
@@ -41,7 +41,8 @@ podés cambiar el tono o las reglas escribiendo en castellano ahí mismo.
   Kobido, Ventosas y Piedras calientes.
 - **Lunes a viernes, 18 a 22 hs**, sesiones de 2 horas (18 y 20 hs):
   Biomagnetismo.
-- Todas con terapia de sonido con diapasones.
+- Todas las terapias se acompañan con **terapia de sonido: frecuencias y
+  diapasones**. El asistente lo menciona siempre que explica un servicio.
 
 **Señas**: Biomagnetismo **$30.000**; el resto de los servicios, un mismo
 monto para todos (`sena_monto_ars`). Hay dos herramientas de pago separadas
@@ -53,6 +54,48 @@ terapeuta se completan en el nodo **Configuración del negocio**: es el único l
 que tenés que tocar cuando cambian.
 
 ---
+
+## Avisos para vos (estar afinadas)
+
+Cada vez que pasa algo, te llega un aviso **por WhatsApp a tu número
+personal** y **por mail** (el mail siempre, como respaldo y registro):
+
+| Cuándo | Ejemplo |
+|---|---|
+| Alguien reserva (esperando seña) | 📅 Nueva reserva — Kobido — Ana — jueves 20, 10:00 hs |
+| Se acredita una seña | ✅ Seña pagada ($30.000) — Biomagnetismo — turno confirmado |
+| Se libera un horario sin pagar | ⌛ Se liberó un horario — ... |
+| Alguien pide hablar con vos, quiere reprogramar/cancelar, cuenta algo de salud delicado o pregunta algo que el asistente no sabe | 🙋 Ana necesita que le escribas vos — motivo — su último mensaje — link al chat |
+
+**Importante sobre los avisos por WhatsApp:** WhatsApp solo deja que el
+número del negocio te escriba libremente si vos le escribiste en las
+últimas 24 h. Por eso: **mandale cualquier mensaje ("hola") al número del
+asistente cada mañana**. El asistente te reconoce, no te trata como
+clienta, y te contesta "✅ Avisos activos por 24 hs". Si un día te
+olvidás, los avisos igual te llegan por mail. (Para no depender de eso, se
+puede aprobar una *plantilla* de aviso en Meta; queda como próximo paso.)
+
+**Cómo se presenta el asistente:** como *"la asistente virtual de
+[tu nombre]"*. Si alguien pregunta si es una persona, responde con la
+verdad: que es tu asistente y que vos leés todo. Nunca dice ser vos.
+
+## Sobre clonar tu voz
+
+Se puede (por ejemplo con ElevenLabs: subís unos minutos de audio tuyo y
+el asistente responde con notas de voz con tu voz). Recomendación:
+**no por ahora**.
+
+- Una nota de voz con tu voz hace creer que sos vos respondiendo en ese
+  momento. Si después la persona se entera de que era una máquina, se
+  pierde la confianza, que es lo más valioso en terapias.
+- Suma costo por cada audio y otra cuenta para mantener.
+- Lo que más ayuda primero es lo contrario: que el asistente **entienda
+  los audios que te mandan** (en Argentina se manda muchísimo audio).
+  Eso se agrega transcribiendo el audio antes de pasarlo al asistente.
+
+Si más adelante querés tu voz, el uso que mejor funciona es uno donde
+todos saben que es grabado: por ejemplo un audio de bienvenida o la
+explicación de cómo es una sesión de Biomagnetismo.
 
 ## Paso 1 — Conseguir la API de WhatsApp (WhatsApp Cloud API)
 
@@ -97,10 +140,12 @@ En n8n → **Credentials → New**:
 | WhatsApp OAuth API (para el Trigger) | `WhatsApp OAuth account` | App ID y App Secret (Meta → tu app → Configuración → Básica) |
 | Google Calendar OAuth2 API | `Google Calendar account` | Login con la cuenta de Google de BioBalance |
 | Anthropic | `Anthropic account` | API key de https://console.anthropic.com |
+| Gmail OAuth2 | `Gmail account` | La cuenta de Gmail desde la que salen los avisos |
 
 Y en **Settings → Variables** (o en el entorno del proceso de n8n) las
 variables nuevas de `.env.example`: `N8N_PUBLIC_URL`,
-`WHATSAPP_PHONE_NUMBER_ID`, `GOOGLE_CALENDAR_ID`, `MP_ACCESS_TOKEN`.
+`WHATSAPP_PHONE_NUMBER_ID`, `GOOGLE_CALENDAR_ID`, `MP_ACCESS_TOKEN`,
+`AVISOS_WHATSAPP` (tu número personal) y `AVISOS_EMAIL`.
 
 > n8n tiene que ser accesible desde internet con **https** para que Meta y
 > Mercado Pago le puedan avisar. Si hoy lo corrés en `localhost`, la forma
@@ -164,16 +209,18 @@ variables nuevas de `.env.example`: `N8N_PUBLIC_URL`,
 - **Salud**: el asistente tiene la instrucción de no prometer curas ni dar
   indicaciones médicas, y de derivar a la terapeuta los casos delicados
   (embarazo, marcapasos, enfermedades).
-- **Hablar con una persona**: si el cliente lo pide, el asistente avisa que
-  le vas a escribir. Por ahora **no te notifica a vos**: revisá los chats o
-  agregá un nodo que te mande un aviso (ej. un WhatsApp a tu número
-  personal o un mail).
+- **Responderle vos a alguien**: el aviso trae el link `wa.me` del chat,
+  pero si el número del asistente está en la API, tenés que contestar
+  desde el panel de Meta (WhatsApp Manager) o desde la app con
+  coexistencia. Mientras tanto el asistente sigue respondiendo en ese chat:
+  si querés que se calle con una persona puntual, decímelo y lo agrego.
 
 ## Próximos pasos sugeridos
 
 1. **Recordatorio 24 h antes** del turno. Necesita una *plantilla* aprobada
    por Meta, porque puede caer fuera de la ventana de 24 h.
-2. **Aviso a la terapeuta** cuando alguien pide hablar con una persona o
-   cuando entra una seña.
-3. **Planilla de Google Sheets** con clientes, servicios y señas, para
+2. **Entender audios** que mandan los clientes (transcripción).
+3. **Plantilla de aviso** en Meta para que los avisos por WhatsApp no
+   dependan de la ventana de 24 h.
+4. **Planilla de Google Sheets** con clientes, servicios y señas, para
    llevar números del mes.
