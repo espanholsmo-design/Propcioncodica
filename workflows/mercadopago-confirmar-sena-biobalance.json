@@ -320,6 +320,129 @@
         }
       },
       "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": false,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "b1",
+              "leftValue": "={{ $('Marcar turno CONFIRMADO').item.json.summary }}",
+              "rightValue": "Biomagnetismo",
+              "operator": {
+                "type": "string",
+                "operation": "contains"
+              }
+            },
+            {
+              "id": "b2",
+              "leftValue": "={{ $('Marcar turno CONFIRMADO').item.json.summary }}",
+              "rightValue": "Bio Spa",
+              "operator": {
+                "type": "string",
+                "operation": "notContains"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "id": "es-bio",
+      "name": "¿Es Biomagnetismo?",
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        1760,
+        600
+      ]
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "t",
+              "name": "texto",
+              "type": "string",
+              "value": "COMPLETAR: escribí acá las indicaciones de preparación para la sesión de Biomagnetismo (qué traer, qué evitar antes, ropa, etc.)."
+            }
+          ]
+        },
+        "options": {}
+      },
+      "id": "texto-prep",
+      "name": "Preparación para Biomagnetismo",
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1980,
+        600
+      ]
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "c",
+              "leftValue": "={{ $json.texto }}",
+              "rightValue": "COMPLETAR",
+              "operator": {
+                "type": "string",
+                "operation": "notStartsWith"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "id": "prep-cargada",
+      "name": "¿Preparación cargada?",
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        2200,
+        600
+      ]
+    },
+    {
+      "parameters": {
+        "operation": "send",
+        "phoneNumberId": "={{ $env.WHATSAPP_PHONE_NUMBER_ID }}",
+        "recipientPhoneNumber": "={{ $('Consultar pago en Mercado Pago').item.json.metadata.telefono }}",
+        "textBody": "=🧲 Cómo prepararte para tu sesión de Biomagnetismo\n\n{{ $json.texto }}\n\nCualquier duda, escribinos por acá 🦋",
+        "additionalFields": {}
+      },
+      "id": "wa-prep",
+      "name": "Enviar preparación por WhatsApp",
+      "type": "n8n-nodes-base.whatsApp",
+      "typeVersion": 1.1,
+      "position": [
+        2420,
+        600
+      ],
+      "credentials": {
+        "whatsAppApi": {
+          "id": "",
+          "name": "WhatsApp account"
+        }
+      }
     }
   ],
   "connections": {
@@ -410,6 +533,44 @@
           },
           {
             "node": "Avisarme por mail",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "¿Es Biomagnetismo?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Es Biomagnetismo?": {
+      "main": [
+        [
+          {
+            "node": "Preparación para Biomagnetismo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Preparación para Biomagnetismo": {
+      "main": [
+        [
+          {
+            "node": "¿Preparación cargada?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Preparación cargada?": {
+      "main": [
+        [
+          {
+            "node": "Enviar preparación por WhatsApp",
             "type": "main",
             "index": 0
           }

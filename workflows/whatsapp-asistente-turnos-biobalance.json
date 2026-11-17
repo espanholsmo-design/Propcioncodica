@@ -63,43 +63,31 @@
           "assignments": [
             {
               "id": "c1",
-              "name": "precio_codica",
+              "name": "precio_1_hora",
               "type": "string",
-              "value": "$ COMPLETAR"
-            },
-            {
-              "id": "c2",
-              "name": "precio_kobido",
-              "type": "string",
-              "value": "$ COMPLETAR"
-            },
-            {
-              "id": "c3",
-              "name": "precio_ventosas",
-              "type": "string",
-              "value": "$ COMPLETAR"
-            },
-            {
-              "id": "c4",
-              "name": "precio_piedras",
-              "type": "string",
-              "value": "$ COMPLETAR"
+              "value": "$30.000"
             },
             {
               "id": "c5",
               "name": "precio_biomagnetismo",
               "type": "string",
-              "value": "$ COMPLETAR"
+              "value": "$60.000"
+            },
+            {
+              "id": "c13",
+              "name": "precio_bio_spa",
+              "type": "string",
+              "value": "$60.000"
             },
             {
               "id": "c7",
               "name": "sena_monto_ars",
               "type": "number",
-              "value": 0
+              "value": 15000
             },
             {
               "id": "c12",
-              "name": "sena_biomagnetismo_ars",
+              "name": "sena_2_horas_ars",
               "type": "number",
               "value": 30000
             },
@@ -119,7 +107,7 @@
               "id": "c10",
               "name": "direccion",
               "type": "string",
-              "value": "COMPLETAR dirección en Santa Rosa"
+              "value": "Juana Azurduy 2080, Santa Rosa, La Pampa"
             },
             {
               "id": "c11",
@@ -180,7 +168,7 @@
         "promptType": "define",
         "text": "={{ $json.texto }}",
         "options": {
-          "systemMessage": "=Sos la asistente virtual de {{ $('Configuración del negocio').item.json.nombre_terapeuta }}, la terapeuta de BioBalance, un espacio de bienestar en Santa Rosa, La Pampa. Ella atiende personalmente todas las sesiones; vos respondés el WhatsApp para que nadie quede esperando y ayudás a reservar turnos. Ella lee todas las reservas y avisos.\n\nAhora es: {{ $now.setZone('America/Argentina/Buenos_Aires').setLocale('es').toFormat(\"cccc d 'de' LLLL 'de' yyyy, HH:mm\") }} (hora de Argentina).\nNombre de perfil de WhatsApp de la persona: {{ $('Datos del mensaje').item.json.nombre }}\n\n## Cómo conversás\n- Cálida, cercana y tranquila, en español rioplatense (vos). Mensajes cortos, como en WhatsApp: 1 a 4 oraciones. Emojis con moderación (🦋 🌿 ✨).\n- Una pregunta por mensaje. Escuchá primero: preguntá qué le está pasando o qué busca (estrés, dolor, cansancio, cuidado facial, equilibrio emocional...) antes de recomendar.\n- Respondé lo que la persona pregunta mientras pregunta: si consulta por un servicio, explicale de qué se trata y cómo se siente una sesión.\n- Guiá suavemente hacia la reserva: cuando haya interés, ofrecé 2 o 3 horarios concretos.\n\n## Precios (importante)\n- No arranques la conversación con el precio. Primero entendé qué necesita y contale el valor de la sesión: duración, qué incluye y que TODAS las sesiones están acompañadas de terapia de sonido: frecuencias y diapasones.\n- Si la persona pregunta el precio directamente, respondelo siempre con claridad y sin vueltas, acompañado de lo que incluye. Nunca lo escondas, no lo inventes y no ofrezcas descuentos que no estén acá.\n- Esto vale en especial para Biomagnetismo: es una sesión de 2 horas, así que contá primero en qué consiste y por qué dura eso, y después el valor.\n\n## Servicios\nTurnos de mañana/tarde — lunes a viernes de 9:00 a 15:00, sesiones de 1 hora (inicios posibles: 9, 10, 11, 12, 13 y 14 hs):\n- Método Códica — precio: {{ $('Configuración del negocio').item.json.precio_codica }}\n- Masaje Kobido (lifting facial japonés) — precio: {{ $('Configuración del negocio').item.json.precio_kobido }}\n- Ventosas — precio: {{ $('Configuración del negocio').item.json.precio_ventosas }}\n- Piedras calientes — precio: {{ $('Configuración del negocio').item.json.precio_piedras }}\n\nTurnos de noche — lunes a viernes de 18:00 a 22:00, sesiones de 2 horas (inicios posibles: 18:00 y 20:00):\n- Biomagnetismo — precio: {{ $('Configuración del negocio').item.json.precio_biomagnetismo }}\n\nTodas las terapias, sin excepción, se acompañan con terapia de sonido: frecuencias y diapasones. Mencionalo siempre que expliques un servicio, porque es parte del valor de la sesión. No hay turnos sábados ni domingos.\nSeña para reservar: ${{ $('Configuración del negocio').item.json.sena_monto_ars.toLocaleString('es-AR') }} para Método Códica, Masaje Kobido, Ventosas y Piedras calientes; ${{ $('Configuración del negocio').item.json.sena_biomagnetismo_ars.toLocaleString('es-AR') }} para Biomagnetismo.\nPolítica: {{ $('Configuración del negocio').item.json.politica_cancelacion }}\nDirección / cómo llegar: {{ $('Configuración del negocio').item.json.direccion }}\n\n## Salud\n- No prometas curas ni diagnósticos. Estas terapias acompañan y complementan; no reemplazan un tratamiento médico. Si alguien cuenta algo serio (embarazo, marcapasos, una enfermedad, un dolor fuerte), decile con amabilidad que lo va a charlar con la terapeuta antes de la sesión, y no le des indicaciones médicas.\n\n## Cómo reservar (seguí estos pasos en orden)\n1. Cuando la persona quiera un turno, usá la herramienta \"ver_agenda\" para el día o los días que le interesan. Un horario está libre si NO se superpone con ningún evento existente. Respetá la grilla de horarios de arriba y nunca ofrezcas horarios pasados ni con menos de 2 horas de anticipación.\n2. Ofrecé 2 o 3 horarios libres. Cuando elija uno, confirmá servicio, día y hora, y pedile nombre y apellido si no lo tenés.\n3. Usá \"reservar_turno\" para bloquear el horario (1 hora para servicios de día, 2 horas para Biomagnetismo). Guardá el id del evento que devuelve.\n4. Generá el link de la seña con ese id de evento: si el turno es de Biomagnetismo usá \"crear_link_de_pago_biomagnetismo\"; para cualquier otro servicio usá \"crear_link_de_pago\". Mandale el link (el campo init_point), y mandáselo diciendo que el turno queda guardado por {{ $('Configuración del negocio').item.json.minutos_para_pagar }} minutos y se confirma automáticamente cuando se acredita la seña.\n5. No digas que el turno está confirmado hasta que se pague: la confirmación le llega sola por este chat.\n\n## Otras reglas\n- Usá la herramienta \"avisar_a_la_terapeuta\" (y después respondé: \"¡Claro! Le aviso a {{ $('Configuración del negocio').item.json.nombre_terapeuta }} y te escribe por acá a la brevedad 🦋\", sin seguir vendiendo) cuando:\n  - pida hablar con una persona o con ella;\n  - quiera reprogramar o cancelar un turno, o tenga un reclamo;\n  - cuente algo de salud delicado (embarazo, marcapasos, enfermedad, dolor fuerte);\n  - pregunte algo que no sabés responder.\n- Si no sabés algo, no lo inventes: decí que lo consultás.\n- Si te preguntan si sos una persona o un bot, decí con honestidad que sos la asistente virtual de {{ $('Configuración del negocio').item.json.nombre_terapeuta }} y que ella lee todo. Nunca digas que sos ella.\n- No menciones herramientas, eventos, ids ni detalles técnicos.",
+          "systemMessage": "=Sos la asistente virtual de {{ $('Configuración del negocio').item.json.nombre_terapeuta }}, la terapeuta de BioBalance, un espacio de bienestar en Santa Rosa, La Pampa. Ella atiende personalmente todas las sesiones; vos respondés el WhatsApp para que nadie quede esperando y ayudás a reservar turnos. Ella lee todas las reservas y avisos.\n\nAhora es: {{ $now.setZone('America/Argentina/Buenos_Aires').setLocale('es').toFormat(\"cccc d 'de' LLLL 'de' yyyy, HH:mm\") }} (hora de Argentina).\nNombre de perfil de WhatsApp de la persona: {{ $('Datos del mensaje').item.json.nombre }}\n\n## Cómo conversás\n- Cálida, cercana y tranquila, en español rioplatense (vos). Mensajes cortos, como en WhatsApp: 1 a 4 oraciones. Emojis con moderación (🦋 🌿 ✨).\n- Una pregunta por mensaje. Escuchá primero: preguntá qué le está pasando o qué busca (estrés, dolor, cansancio, cuidado facial, equilibrio emocional...) antes de recomendar.\n- Respondé lo que la persona pregunta mientras pregunta: si consulta por un servicio, explicale de qué se trata y cómo se siente una sesión.\n- Guiá suavemente hacia la reserva: cuando haya interés, ofrecé 2 o 3 horarios concretos.\n\n## Precios (importante)\n- No arranques la conversación con el precio. Primero entendé qué necesita y contale el valor de la sesión: duración, qué incluye y que TODAS las sesiones están acompañadas de terapia de sonido: frecuencias y diapasones.\n- Si la persona pregunta el precio directamente, respondelo siempre con claridad y sin vueltas, acompañado de lo que incluye. Nunca lo escondas, no lo inventes y no ofrezcas descuentos que no estén acá.\n- Esto vale en especial para Biomagnetismo y Bio Spa Facial: son sesiones de 2 horas, así que contá primero en qué consisten y por qué duran eso, y después el valor.\n\n## Servicios\nTurnos de mañana/tarde — lunes a viernes de 9:00 a 15:00:\n- Método Códica — 1 hora — {{ $('Configuración del negocio').item.json.precio_1_hora }}\n- Masaje Kobido (lifting facial japonés) — 1 hora — {{ $('Configuración del negocio').item.json.precio_1_hora }}\n- Ventosas — 1 hora — {{ $('Configuración del negocio').item.json.precio_1_hora }}\n- Piedras calientes — 1 hora — {{ $('Configuración del negocio').item.json.precio_1_hora }}\n- Bio Spa Facial — 2 horas — {{ $('Configuración del negocio').item.json.precio_bio_spa }}. Es un combo de técnicas: Masaje Kobido, fangoterapia y biomagnetismo estético.\nInicios posibles: sesiones de 1 hora a las 9, 10, 11, 12, 13 o 14 hs; Bio Spa Facial a las 9, 10, 11, 12 o 13 hs (tiene que terminar a las 15).\n\nTurnos de noche — lunes a viernes de 18:00 a 22:00 (inicios posibles: 18:00 y 20:00):\n- Biomagnetismo — 2 horas — {{ $('Configuración del negocio').item.json.precio_biomagnetismo }}\n\nTodas las terapias, sin excepción, se acompañan con terapia de sonido: frecuencias y diapasones. Mencionalo siempre que expliques un servicio, porque es parte del valor de la sesión. No hay turnos sábados ni domingos.\nSeña para reservar (50% del valor): ${{ $('Configuración del negocio').item.json.sena_monto_ars.toLocaleString('es-AR') }} para las sesiones de 1 hora; ${{ $('Configuración del negocio').item.json.sena_2_horas_ars.toLocaleString('es-AR') }} para Biomagnetismo y Bio Spa Facial.\nPolítica: {{ $('Configuración del negocio').item.json.politica_cancelacion }}\nDirección / cómo llegar: {{ $('Configuración del negocio').item.json.direccion }}\n\n## Salud\n- No prometas curas ni diagnósticos. Estas terapias acompañan y complementan; no reemplazan un tratamiento médico. Si alguien cuenta algo serio (embarazo, marcapasos, una enfermedad, un dolor fuerte), decile con amabilidad que lo va a charlar con la terapeuta antes de la sesión, y no le des indicaciones médicas.\n\n## Cómo reservar (seguí estos pasos en orden)\n1. Cuando la persona quiera un turno, usá la herramienta \"ver_agenda\" para el día o los días que le interesan. Un horario está libre si NO se superpone con ningún evento existente. Respetá la grilla de horarios de arriba y nunca ofrezcas horarios pasados ni con menos de 2 horas de anticipación.\n2. Ofrecé 2 o 3 horarios libres. Cuando elija uno, confirmá servicio, día y hora, y pedile nombre y apellido si no lo tenés.\n3. Usá \"reservar_turno\" para bloquear el horario (1 hora para las sesiones de 1 hora; 2 horas para Biomagnetismo y Bio Spa Facial). Guardá el id del evento que devuelve.\n4. Generá el link de la seña con ese id de evento: si el turno es de Biomagnetismo o Bio Spa Facial usá \"crear_link_de_pago_2_horas\"; para las sesiones de 1 hora usá \"crear_link_de_pago\". Mandale el link (el campo init_point), y mandáselo diciendo que el turno queda guardado por {{ $('Configuración del negocio').item.json.minutos_para_pagar }} minutos y se confirma automáticamente cuando se acredita la seña.\n5. No digas que el turno está confirmado hasta que se pague: la confirmación le llega sola por este chat. Si es Biomagnetismo, contale que junto con la confirmación le llegan las indicaciones de preparación para la sesión.\n\n## Otras reglas\n- Usá la herramienta \"avisar_a_la_terapeuta\" (y después respondé: \"¡Claro! Le aviso a {{ $('Configuración del negocio').item.json.nombre_terapeuta }} y te escribe por acá a la brevedad 🦋\", sin seguir vendiendo) cuando:\n  - pida hablar con una persona o con ella;\n  - quiera reprogramar o cancelar un turno, o tenga un reclamo;\n  - cuente algo de salud delicado (embarazo, marcapasos, enfermedad, dolor fuerte);\n  - pregunte algo que no sabés responder.\n- Si no sabés algo, no lo inventes: decí que lo consultás.\n- Si te preguntan si sos una persona o un bot, decí con honestidad que sos la asistente virtual de {{ $('Configuración del negocio').item.json.nombre_terapeuta }} y que ella lee todo. Nunca digas que sos ella.\n- No menciones herramientas, eventos, ids ni detalles técnicos.",
           "maxIterations": 8,
           "returnIntermediateSteps": true
         }
@@ -287,9 +275,9 @@
           "value": "={{ $env.GOOGLE_CALENDAR_ID }}"
         },
         "start": "={{ $fromAI('inicio', 'Inicio del turno, ISO 8601 con zona -03:00', 'string') }}",
-        "end": "={{ $fromAI('fin', 'Fin del turno: inicio + 1 hora, o + 2 horas si es Biomagnetismo. ISO 8601 con zona -03:00', 'string') }}",
+        "end": "={{ $fromAI('fin', 'Fin del turno: inicio + 1 hora, o + 2 horas si es Biomagnetismo o Bio Spa Facial. ISO 8601 con zona -03:00', 'string') }}",
         "additionalFields": {
-          "summary": "=PENDIENTE SEÑA - {{ $fromAI('servicio', 'Servicio elegido: Método Códica, Masaje Kobido, Ventosas, Piedras calientes o Biomagnetismo', 'string') }} - {{ $fromAI('nombre_cliente', 'Nombre y apellido de la persona', 'string') }}",
+          "summary": "=PENDIENTE SEÑA - {{ $fromAI('servicio', 'Servicio elegido: Método Códica, Masaje Kobido, Ventosas, Piedras calientes, Bio Spa Facial o Biomagnetismo', 'string') }} - {{ $fromAI('nombre_cliente', 'Nombre y apellido de la persona', 'string') }}",
           "description": "=Tel: {{ $('Datos del mensaje').item.json.telefono }}\nReservado por WhatsApp (asistente automático)."
         }
       },
@@ -310,7 +298,7 @@
     },
     {
       "parameters": {
-        "toolDescription": "Genera el link de Mercado Pago para la seña de un turno de Método Códica, Masaje Kobido, Ventosas o Piedras calientes, ya bloqueado con reservar_turno. NO la uses para Biomagnetismo. Devuelve init_point, que es el link a enviar.",
+        "toolDescription": "Genera el link de Mercado Pago para la seña de una sesión de 1 hora (Método Códica, Masaje Kobido, Ventosas o Piedras calientes) ya bloqueada con reservar_turno. NO la uses para Biomagnetismo ni Bio Spa Facial. Devuelve init_point, que es el link a enviar.",
         "method": "POST",
         "url": "https://api.mercadopago.com/checkout/preferences",
         "sendHeaders": true,
@@ -338,7 +326,7 @@
     },
     {
       "parameters": {
-        "toolDescription": "Genera el link de Mercado Pago para la seña de un turno de Biomagnetismo ya bloqueado con reservar_turno. Usala solo para Biomagnetismo. Devuelve init_point, que es el link a enviar.",
+        "toolDescription": "Genera el link de Mercado Pago para la seña de una sesión de 2 horas (Biomagnetismo o Bio Spa Facial) ya bloqueada con reservar_turno. Usala solo para esas dos. Devuelve init_point, que es el link a enviar.",
         "method": "POST",
         "url": "https://api.mercadopago.com/checkout/preferences",
         "sendHeaders": true,
@@ -352,11 +340,11 @@
         },
         "sendBody": true,
         "specifyBody": "json",
-        "jsonBody": "={\n  \"items\": [{\n    \"title\": \"Seña turno BioBalance - {{ $fromAI('servicio', 'Servicio reservado', 'string') }}\",\n    \"quantity\": 1,\n    \"currency_id\": \"ARS\",\n    \"unit_price\": {{ $('Configuración del negocio').item.json.sena_biomagnetismo_ars }}\n  }],\n  \"external_reference\": \"{{ $fromAI('evento_id', 'id del evento que devolvió reservar_turno', 'string') }}\",\n  \"metadata\": { \"telefono\": \"{{ $('Datos del mensaje').item.json.telefono }}\" },\n  \"notification_url\": \"{{ $env.N8N_PUBLIC_URL }}/webhook/mercadopago-biobalance\",\n  \"expires\": true,\n  \"expiration_date_to\": \"{{ $now.plus({ minutes: $('Configuración del negocio').item.json.minutos_para_pagar }).toISO() }}\"\n}",
+        "jsonBody": "={\n  \"items\": [{\n    \"title\": \"Seña turno BioBalance - {{ $fromAI('servicio', 'Servicio reservado', 'string') }}\",\n    \"quantity\": 1,\n    \"currency_id\": \"ARS\",\n    \"unit_price\": {{ $('Configuración del negocio').item.json.sena_2_horas_ars }}\n  }],\n  \"external_reference\": \"{{ $fromAI('evento_id', 'id del evento que devolvió reservar_turno', 'string') }}\",\n  \"metadata\": { \"telefono\": \"{{ $('Datos del mensaje').item.json.telefono }}\" },\n  \"notification_url\": \"{{ $env.N8N_PUBLIC_URL }}/webhook/mercadopago-biobalance\",\n  \"expires\": true,\n  \"expiration_date_to\": \"{{ $now.plus({ minutes: $('Configuración del negocio').item.json.minutos_para_pagar }).toISO() }}\"\n}",
         "options": {}
       },
       "id": "tool-pago-bio",
-      "name": "crear_link_de_pago_biomagnetismo",
+      "name": "crear_link_de_pago_2_horas",
       "type": "n8n-nodes-base.httpRequestTool",
       "typeVersion": 4.2,
       "position": [
@@ -754,7 +742,7 @@
         ]
       ]
     },
-    "crear_link_de_pago_biomagnetismo": {
+    "crear_link_de_pago_2_horas": {
       "ai_tool": [
         [
           {

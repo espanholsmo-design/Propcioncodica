@@ -35,19 +35,31 @@ incluye. Con Biomagnetismo cuenta primero por qué la sesión dura 2 horas.
 Todo eso está en el *System Message* del nodo **Asistente BioBalance**:
 podés cambiar el tono o las reglas escribiendo en castellano ahí mismo.
 
-## Horarios configurados
+## Servicios, precios y señas
 
-- **Lunes a viernes, 9 a 15 hs**, sesiones de 1 hora: Método Códica, Masaje
-  Kobido, Ventosas y Piedras calientes.
-- **Lunes a viernes, 18 a 22 hs**, sesiones de 2 horas (18 y 20 hs):
-  Biomagnetismo.
-- Todas las terapias se acompañan con **terapia de sonido: frecuencias y
-  diapasones**. El asistente lo menciona siempre que explica un servicio.
+| Servicio | Duración | Precio | Seña (50%) | Horario |
+|---|---|---|---|---|
+| Método Códica | 1 h | $30.000 | $15.000 | Lun a vie, 9 a 15 hs |
+| Masaje Kobido | 1 h | $30.000 | $15.000 | Lun a vie, 9 a 15 hs |
+| Ventosas | 1 h | $30.000 | $15.000 | Lun a vie, 9 a 15 hs |
+| Piedras calientes | 1 h | $30.000 | $15.000 | Lun a vie, 9 a 15 hs |
+| Bio Spa Facial (Kobido + fangoterapia + biomagnetismo estético) | 2 h | $60.000 | $30.000 | Lun a vie, inicio 9 a 13 hs |
+| Biomagnetismo | 2 h | $60.000 | $30.000 | Lun a vie, 18 y 20 hs |
 
-**Señas**: Biomagnetismo **$30.000**; el resto de los servicios, un mismo
-monto para todos (`sena_monto_ars`). Hay dos herramientas de pago separadas
-(`crear_link_de_pago` y `crear_link_de_pago_biomagnetismo`), así el monto
-sale siempre de la configuración y nunca lo "elige" la IA.
+Todas las terapias se acompañan con **terapia de sonido: frecuencias y
+diapasones**, y el asistente lo menciona siempre que explica un servicio.
+
+Hay dos herramientas de pago separadas, `crear_link_de_pago` (sesiones de
+1 h) y `crear_link_de_pago_2_horas` (Biomagnetismo y Bio Spa Facial). Así
+el monto sale siempre de la configuración y nunca lo elige la IA.
+
+**Preparación de Biomagnetismo:** cuando se paga la seña de un turno de
+Biomagnetismo, además de la confirmación se manda por WhatsApp un mensaje
+con la preparación. El texto se escribe en el nodo **Preparación para
+Biomagnetismo** del workflow de Mercado Pago. Mientras diga "COMPLETAR",
+no se manda nada.
+
+Dirección: **Juana Azurduy 2080, Santa Rosa, La Pampa**.
 
 Precios, montos de seña, política de cancelación, dirección y nombre de la
 terapeuta se completan en el nodo **Configuración del negocio**: es el único lugar
