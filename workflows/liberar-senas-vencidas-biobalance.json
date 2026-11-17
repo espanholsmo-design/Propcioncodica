@@ -150,6 +150,41 @@
     },
     {
       "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "loose",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "num",
+              "leftValue": "={{ $env.AVISOS_WHATSAPP ?? '' }}",
+              "rightValue": "",
+              "operator": {
+                "type": "string",
+                "operation": "notEmpty",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "looseTypeValidation": true,
+        "options": {}
+      },
+      "id": "av-hay-num",
+      "name": "¿Hay número para avisos?",
+      "type": "n8n-nodes-base.filter",
+      "typeVersion": 2.2,
+      "position": [
+        900,
+        160
+      ]
+    },
+    {
+      "parameters": {
         "operation": "send",
         "phoneNumberId": "={{ $env.WHATSAPP_PHONE_NUMBER_ID }}",
         "recipientPhoneNumber": "={{ $env.AVISOS_WHATSAPP }}",
@@ -162,7 +197,7 @@
       "typeVersion": 1.1,
       "position": [
         1100,
-        300
+        160
       ],
       "credentials": {
         "whatsAppApi": {
@@ -248,12 +283,23 @@
       "main": [
         [
           {
-            "node": "Avisarme por WhatsApp",
+            "node": "¿Hay número para avisos?",
             "type": "main",
             "index": 0
           },
           {
             "node": "Avisarme por mail",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "¿Hay número para avisos?": {
+      "main": [
+        [
+          {
+            "node": "Avisarme por WhatsApp",
             "type": "main",
             "index": 0
           }

@@ -67,13 +67,17 @@ personal** y **por mail** (el mail siempre, como respaldo y registro):
 | Se libera un horario sin pagar | ⌛ Se liberó un horario — ... |
 | Alguien pide hablar con vos, quiere reprogramar/cancelar, cuenta algo de salud delicado o pregunta algo que el asistente no sabe | 🙋 Ana necesita que le escribas vos — motivo — su último mensaje — link al chat |
 
-**Importante sobre los avisos por WhatsApp:** WhatsApp solo deja que el
-número del negocio te escriba libremente si vos le escribiste en las
-últimas 24 h. Por eso: **mandale cualquier mensaje ("hola") al número del
-asistente cada mañana**. El asistente te reconoce, no te trata como
-clienta, y te contesta "✅ Avisos activos por 24 hs". Si un día te
-olvidás, los avisos igual te llegan por mail. (Para no depender de eso, se
-puede aprobar una *plantilla* de aviso en Meta; queda como próximo paso.)
+**Si tenés un solo número (el caso de Silvina):** no se puede mandar un
+WhatsApp a uno mismo, así que dejá `AVISOS_WHATSAPP` **vacío** y los avisos
+llegan **solo por mail**. Si con coexistencia (ver Paso 1) seguís usando la
+app de WhatsApp Business, además vas a ver todas las conversaciones del
+asistente en tu celular, como siempre.
+
+**Si algún día tenés un segundo número:** cargalo en `AVISOS_WHATSAPP` y
+los avisos llegan también por WhatsApp. WhatsApp solo deja que el negocio
+te escriba si le escribiste en las últimas 24 h, así que mandale un "hola"
+al número del asistente cada mañana: te reconoce y te contesta "✅ Avisos
+activos por 24 hs".
 
 **Cómo se presenta el asistente:** como *"la asistente virtual de
 [tu nombre]"*. Si alguien pregunta si es una persona, responde con la
@@ -110,15 +114,22 @@ de Meta, el mismo que ya usaste para Instagram/Facebook.
    (*API Setup*). Ahí Meta te da un **número de prueba**, un **token
    temporal** y el **Phone number ID**. Con eso ya podés probar mandándote
    mensajes a tu propio celular (agregalo como destinatario de prueba).
-3. **Agregar tu número real**: en esa misma pantalla, **Agregar número de
-   teléfono**. Ojo:
-   - Un número registrado en la API **deja de funcionar en la app común de
-     WhatsApp** del celular. Lo más simple es usar un número nuevo (un chip
-     aparte) para el asistente.
-   - Si querés usar el mismo número que ya usás en **WhatsApp Business**
-     (la app), Meta tiene una opción de "coexistencia" que permite seguir
-     usando la app y la API a la vez. Se activa desde algunos proveedores
-     oficiales al conectar el número; si te interesa, lo vemos aparte.
+3. **Agregar tu número real**. Acá está la decisión importante, porque
+   **Silvina usa un solo número para todo**:
+   - **Opción recomendada: coexistencia.** Meta permite conectar a la API
+     el mismo número que ya usás en la app **WhatsApp Business**, y seguir
+     usando la app en el celular. Los clientes siguen escribiendo al número
+     de siempre, vos ves todos los chats en tu teléfono y podés contestar
+     vos cuando quieras. Requisitos: el número tiene que estar en
+     **WhatsApp Business** (no en el WhatsApp común) y con la app
+     actualizada. La conexión se hace con el "registro integrado"
+     (*Embedded Signup*) de Meta, que normalmente ofrecen los proveedores
+     oficiales de WhatsApp (BSP). Antes de elegir uno, confirmá que
+     soporte coexistencia y que dé acceso a la Cloud API, porque eso es lo
+     que usa n8n.
+   - **Sin coexistencia**, un número conectado a la API **deja de funcionar
+     en la app del celular**: perderías tu WhatsApp. En ese caso conviene
+     un chip nuevo (sale muy poco) para el asistente o para vos.
 4. **Token permanente** (el temporal dura 24 h): en
    **business.facebook.com → Configuración → Usuarios del sistema** creá
    un usuario del sistema administrador, asignale la app y la cuenta de
@@ -209,18 +220,18 @@ variables nuevas de `.env.example`: `N8N_PUBLIC_URL`,
 - **Salud**: el asistente tiene la instrucción de no prometer curas ni dar
   indicaciones médicas, y de derivar a la terapeuta los casos delicados
   (embarazo, marcapasos, enfermedades).
-- **Responderle vos a alguien**: el aviso trae el link `wa.me` del chat,
-  pero si el número del asistente está en la API, tenés que contestar
-  desde el panel de Meta (WhatsApp Manager) o desde la app con
-  coexistencia. Mientras tanto el asistente sigue respondiendo en ese chat:
-  si querés que se calle con una persona puntual, decímelo y lo agrego.
+- **Cuando Silvina contesta un chat ella misma** (desde la app, con
+  coexistencia), el asistente **todavía no se entera** y podría seguir
+  respondiendo en ese chat. Próximo paso pendiente: que el asistente se
+  pause solo durante unas horas en un chat donde ella escribió.
 
 ## Próximos pasos sugeridos
 
 1. **Recordatorio 24 h antes** del turno. Necesita una *plantilla* aprobada
    por Meta, porque puede caer fuera de la ventana de 24 h.
-2. **Entender audios** que mandan los clientes (transcripción).
-3. **Plantilla de aviso** en Meta para que los avisos por WhatsApp no
+2. **Pausa automática** del asistente en un chat cuando Silvina responde.
+3. **Entender audios** que mandan los clientes (transcripción).
+4. **Plantilla de aviso** en Meta para que los avisos por WhatsApp no
    dependan de la ventana de 24 h.
-4. **Planilla de Google Sheets** con clientes, servicios y señas, para
+5. **Planilla de Google Sheets** con clientes, servicios y señas, para
    llevar números del mes.
