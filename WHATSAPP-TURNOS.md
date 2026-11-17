@@ -37,7 +37,7 @@ podés cambiar el tono o las reglas escribiendo en castellano ahí mismo.
 
 ## Servicios, precios y señas
 
-| Servicio | Duración | Precio | Seña (50%) | Horario |
+| Servicio | Duración | Precio | Seña (se descuenta del total) | Horario |
 |---|---|---|---|---|
 | Método Códica | 1 h | $30.000 | $15.000 | Lun a vie, 9 a 15 hs |
 | Masaje Kobido | 1 h | $30.000 | $15.000 | Lun a vie, 9 a 15 hs |
@@ -53,11 +53,14 @@ Hay dos herramientas de pago separadas, `crear_link_de_pago` (sesiones de
 1 h) y `crear_link_de_pago_2_horas` (Biomagnetismo y Bio Spa Facial). Así
 el monto sale siempre de la configuración y nunca lo elige la IA.
 
-**Cuotas en Biomagnetismo:** el total se puede pagar en 3 cuotas sin
-interés o hasta 6 con recargo. Cada vez que el asistente dice el precio de
-Biomagnetismo, en la misma frase cuenta lo de las cuotas y que para
-reservar alcanza con la seña de $30.000. El texto se cambia en
-`financiacion_biomagnetismo` (nodo **Configuración del negocio**).
+**Cómo funciona la seña** (el asistente lo aclara siempre que habla de la
+seña o manda el link, para que nadie piense que paga dos veces):
+- Se paga **en un solo pago** por Mercado Pago (el link no permite cuotas).
+- **Se descuenta del total**: no es un costo extra.
+- **El resto se paga el día de la sesión**, y ahí la persona elige la forma
+  de pago. En Biomagnetismo puede ser en hasta 3 cuotas sin interés o en 6
+  con recargo. Cuando el asistente dice el precio de Biomagnetismo, lo
+  aclara en la misma frase.
 
 **Preparación de Biomagnetismo:** cuando se paga la seña de un turno de
 Biomagnetismo, además de la confirmación se manda por WhatsApp un mensaje

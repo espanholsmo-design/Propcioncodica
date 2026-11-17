@@ -217,7 +217,7 @@
         "operation": "send",
         "phoneNumberId": "={{ $env.WHATSAPP_PHONE_NUMBER_ID }}",
         "recipientPhoneNumber": "={{ $('Consultar pago en Mercado Pago').item.json.metadata.telefono }}",
-        "textBody": "=¡Listo! 🦋 Recibimos tu seña y tu turno quedó confirmado:\n\n✨ {{ $json.summary.replace('CONFIRMADO - ', '') }}\n📅 {{ DateTime.fromISO($json.start.dateTime).setZone('America/Argentina/Buenos_Aires').setLocale('es').toFormat(\"cccc d 'de' LLLL, HH:mm\") }} hs\n\nTe esperamos en BioBalance 🌿 Si necesitás reprogramar, avisanos con 24 hs de anticipación.",
+        "textBody": "=¡Listo! 🦋 Recibimos tu seña y tu turno quedó confirmado:\n\n✨ {{ $json.summary.replace('CONFIRMADO - ', '') }}\n📅 {{ DateTime.fromISO($json.start.dateTime).setZone('America/Argentina/Buenos_Aires').setLocale('es').toFormat(\"cccc d 'de' LLLL, HH:mm\") }} hs\n\nRecordá que la seña se descuenta del total: el resto lo abonás el día de la sesión y ahí elegís la forma de pago.\n\n📍 Juana Azurduy 2080, Santa Rosa\n\nTe esperamos en BioBalance 🌿 Si necesitás reprogramar, avisanos con 24 hs de anticipación.",
         "additionalFields": {}
       },
       "id": "wa-confirmar",
