@@ -58,9 +58,10 @@ seña o manda el link, para que nadie piense que paga dos veces):
 - Se paga **en un solo pago** por Mercado Pago (el link no permite cuotas).
 - **Se descuenta del total**: no es un costo extra.
 - **El resto se paga el día de la sesión**, y ahí la persona elige la forma
-  de pago. En Biomagnetismo puede ser en hasta 3 cuotas sin interés o en 6
-  con recargo. Cuando el asistente dice el precio de Biomagnetismo, lo
-  aclara en la misma frase.
+  de pago. En **Biomagnetismo y Bio Spa Facial** puede ser en hasta 3
+  cuotas sin interés o en 6 con interés. Cuando el asistente dice el precio
+  de alguno de los dos, lo aclara en la misma frase (texto en
+  `financiacion_2_horas`, nodo **Configuración del negocio**).
 
 **Preparación de Biomagnetismo:** cuando se paga la seña de un turno de
 Biomagnetismo, además de la confirmación se manda por WhatsApp un mensaje
