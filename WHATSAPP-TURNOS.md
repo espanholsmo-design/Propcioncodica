@@ -69,7 +69,9 @@ personal** y **por mail** (el mail siempre, como respaldo y registro):
 
 **Si tenés un solo número (el caso de Silvina):** no se puede mandar un
 WhatsApp a uno mismo, así que dejá `AVISOS_WHATSAPP` **vacío** y los avisos
-llegan **solo por mail**. Si con coexistencia (ver Paso 1) seguís usando la
+llegan **solo por mail**, a **biobalance.consultas@gmail.com**. Activá las
+notificaciones de esa cuenta en la app de Gmail del celular para enterarte
+al momento. Si con coexistencia (ver Paso 1) seguís usando la
 app de WhatsApp Business, además vas a ver todas las conversaciones del
 asistente en tu celular, como siempre.
 

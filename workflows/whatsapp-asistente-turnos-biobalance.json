@@ -538,7 +538,7 @@
     },
     {
       "parameters": {
-        "sendTo": "={{ $env.AVISOS_EMAIL }}",
+        "sendTo": "={{ $env.AVISOS_EMAIL || 'biobalance.consultas@gmail.com' }}",
         "subject": "BioBalance - aviso de turnos",
         "emailType": "text",
         "message": "={{ $json.aviso }}",

@@ -297,7 +297,7 @@
     },
     {
       "parameters": {
-        "sendTo": "={{ $env.AVISOS_EMAIL }}",
+        "sendTo": "={{ $env.AVISOS_EMAIL || 'biobalance.consultas@gmail.com' }}",
         "subject": "BioBalance - aviso de turnos",
         "emailType": "text",
         "message": "=✅ Seña pagada (${{ $('Consultar pago en Mercado Pago').item.json.transaction_amount }})\\n{{ $('Marcar turno CONFIRMADO').item.json.summary.replace('CONFIRMADO - ', '') }}\\n{{ DateTime.fromISO($('Marcar turno CONFIRMADO').item.json.start.dateTime).setZone('America/Argentina/Buenos_Aires').setLocale('es').toFormat(\"cccc d 'de' LLLL, HH:mm\") }} hs — turno confirmado",
